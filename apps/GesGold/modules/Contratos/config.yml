@@ -1,0 +1,603 @@
+# Module: Contratos
+# Document : modules\Contratos\config.yml
+#
+# @author Sergio Pérez <sergio.perez@albatronic.com>
+# @copyright INFORMATICA ALBATRONIC SL
+# @since 12.04.2012 17:43:58
+#
+---
+Contratos:
+  login_required: YES
+  permission_control: YES
+  favourite_control: NO
+  help_file: help.html.twig
+  title: Contratos
+  id_video: 008c8432-1a60-4de1-b9e7-991334597c28
+  url_video: null
+  conection: 'datos<?php echo $_SESSION['emp'];?>'
+  entity: Contratos
+  table: contratos
+  primarykey: IDContrato
+  records_per_page: 17
+  order_by:
+    -
+      title: Número z-a
+      criteria: NumeroContrato DESC
+    -
+      title: Número a-z
+      criteria: NumeroContrato ASC
+    -
+      title: Fecha z-a
+      criteria: Fecha DESC
+    -
+      title: Fecha a-z
+      criteria: Fecha ASC
+  search_default: IDContrato
+  referenced_entities:
+    -
+      entity: Contadores
+    -
+      entity: Sucursales
+    -
+      entity: Clientes
+    -
+      entity: IDAgente
+    -
+      entity: EstadosContratos
+    -
+      entity: FormasPago
+    -
+      entity: Articulos
+  columns:
+    -
+      title: IDContrato
+      field: IDContrato
+      filter: NO
+      list: NO
+      form: YES
+      link:
+        route: null
+        param: null
+        title: null
+        target: null
+        link: null
+      default:
+    -
+      title: Serie
+      field: IDContador
+      filter: NO
+      list: NO
+      form: YES
+      link:
+        route: null
+        param: null
+        title: null
+        target: null
+        link: null
+      default: 0
+      validator:
+        nullable: NO
+        type: integer
+        length: 20
+        min: null
+        max: null
+        message: Valor Requerido
+    -
+      title: Contrato
+      field: NumeroContrato
+      filter: YES
+      list: YES
+      form: YES
+      link:
+        route: null
+        param: null
+        title: null
+        target: null
+        link: null
+      default:
+      validator:
+        nullable: YES
+        type: string
+        length: 15
+        min: null
+        max: null
+        message: Valor Requerido
+    -
+      title: Sucursal
+      field: IDSucursal
+      filter: NO
+      list: YES
+      form: YES
+      link:
+        route: null
+        param: null
+        title: null
+        target: null
+        link: null
+      default: 0
+      aditional_filter:
+        order: 1
+        caption: Sucursal
+        entity: 'Agentes,<?php echo $_SESSION['USER']['user']['id'];?>'
+        method: getSucursales
+        params:
+        type: select
+      validator:
+        nullable: NO
+        type: integer
+        length: 15
+        min: null
+        max: null
+        message: Valor Requerido
+    -
+      title: Almacén
+      field: IDAlmacen
+      filter: NO
+      list: YES
+      form: YES
+      default: 000
+      validator:
+        nullable: NO
+        type: integer
+        length: 10
+        min: null
+        max: null
+        message: Valor Requerido
+      aditional_filter:
+        order: 2
+        caption: Almacén
+        entity: 'Agentes,<?php echo $_SESSION['USER']['user']['id'];?>'
+        method: getAlmacenes
+        params: null
+        type: select
+    -
+      title: Fecha
+      field: Fecha
+      filter: NO
+      list: YES
+      form: YES
+      link:
+        route: null
+        param: null
+        title: null
+        target: null
+        link: null
+      default: 0000-00-00
+      aditional_filter:
+        order: 3
+        caption: Fecha Contrato
+        type: range
+        operator: >=
+      validator:
+        nullable: NO
+        type: date
+        length: 10
+        min: null
+        max: null
+        message: Valor Requerido
+    -
+      title: Cliente
+      field: IDCliente
+      filter: NO
+      list: YES
+      form: YES
+      link:
+        route: null
+        param: null
+        title: null
+        target: null
+        link: null
+      default: 0
+      aditional_filter:
+        order: 5
+        caption: Cliente (%)
+        entity: Clientes
+        method: null
+        params: RazonSocial
+        type: input
+      validator:
+        nullable: NO
+        type: integer
+        length: 30
+        min: null
+        max: null
+        message: Valor Requerido
+    -
+      title: Agente
+      field: IDAgente
+      filter: NO
+      list: YES
+      form: YES
+      link:
+        route: null
+        param: null
+        title: null
+        target: null
+        link: null
+      default: 0
+      validator:
+        nullable: NO
+        type: integer
+        length: 10
+        min: null
+        max: null
+        message: Valor Requerido
+    -
+      title: Comercial
+      field: IDComercial
+      filter: NO
+      list: YES
+      form: YES
+      link:
+        route: null
+        param: null
+        title: null
+        target: null
+        link: null
+      default: 0
+      validator:
+        nullable: NO
+        type: integer
+        length: 10
+        min: null
+        max: null
+        message: Valor Requerido
+    -
+      title: Estado
+      field: IDEstado
+      filter: NO
+      list: YES
+      form: YES
+      link:
+        route: null
+        param: null
+        title: null
+        target: null
+        link: null
+      default: 0
+      aditional_filter:
+        order: 6
+        caption: Estado
+        entity: EstadosContratos
+        method: fetchAll
+        params: Descripcion
+        type: select
+        operator: =
+        event: null
+      validator:
+        nullable: NO
+        type: tinyint
+        length: 15
+        min: null
+        max: null
+        message: Valor Requerido
+    -
+      title: Forma de Pago
+      field: IDFP
+      filter: NO
+      list: NO
+      form: YES
+      link:
+        route: null
+        param: null
+        title: null
+        target: null
+        link: null
+      default: 1
+      aditional_filter:
+        order: 7
+        caption: Forma de Pago
+        entity: FormasPago
+        method: fetchAll
+        params: Descripcion
+        type: select
+        operator: =
+        event: null
+      validator:
+        nullable: NO
+        type: integer
+        length: 4
+        min: null
+        max: null
+        message: Valor Requerido
+    -
+      title: Descripción Piezas
+      field: DescripcionPiezas
+      filter: NO
+      list: NO
+      form: YES
+      link:
+        route: null
+        param: null
+        title: null
+        target: null
+        link: null
+      default:
+      validator:
+        nullable: NO
+        type: string
+        length:
+        min: null
+        max: null
+        message: Valor Requerido
+    -
+      title: Artículo
+      field: IDArticulo
+      filter: NO
+      list: NO
+      form: YES
+      link:
+        route: null
+        param: null
+        title: null
+        target: null
+        link: null
+      default: 0
+      aditional_filter:
+        order: 8
+        caption: Artículo (%)
+        entity: Articulos
+        method: null
+        params: Descripcion
+        type: input
+      validator:
+        nullable: NO
+        type: integer
+        length: 11
+        min: 1
+        max: 99999
+        message: Valor Requerido
+    -
+      title: Descripción
+      field: Descripcion
+      filter: NO
+      list: NO
+      form: YES
+      link:
+        route: null
+        param: null
+        title: null
+        target: null
+        link: null
+      default:
+      validator:
+        nullable: NO
+        type: string
+        length: 255
+        min: null
+        max: null
+        message: Valor Requerido
+    -
+      title: Peso Bruto
+      field: PesoBruto
+      filter: NO
+      list: NO
+      form: YES
+      link:
+        route: null
+        param: null
+        title: null
+        target: null
+        link: null
+      default: 0.00
+      validator:
+        nullable: NO
+        type: decimal
+        length: 10
+        min: 0
+        max: 9999
+        message: Valor Requerido
+    -
+      title: Tara
+      field: Tara
+      filter: NO
+      list: NO
+      form: YES
+      link:
+        route: null
+        param: null
+        title: null
+        target: null
+        link: null
+      default: 0.00
+      validator:
+        nullable: NO
+        type: decimal
+        length: 10
+        min: 0
+        max: 9999
+        message: Valor Requerido
+    -
+      title: PesoNeto
+      field: PesoNeto
+      filter: NO
+      list: NO
+      form: YES
+      link:
+        route: null
+        param: null
+        title: null
+        target: null
+        link: null
+      default: 0.00
+      validator:
+        nullable: NO
+        type: decimal
+        length: 10
+        min: null
+        max: null
+        message: Valor Requerido
+    -
+      title: Precio Gramo
+      field: PrecioGramo
+      filter: NO
+      list: NO
+      form: YES
+      link:
+        route: null
+        param: null
+        title: null
+        target: null
+        link: null
+      default: 0.00
+      validator:
+        nullable: NO
+        type: decimal
+        length: 10
+        min: 0
+        max: 9999
+        message: Valor Requerido
+    -
+      title: PorcentajeAlta
+      field: PorcentajeAlta
+      filter: NO
+      list: NO
+      form: YES
+      link:
+        route: null
+        param: null
+        title: null
+        target: null
+        link: null
+      default: 0.00
+      validator:
+        nullable: NO
+        type: decimal
+        length: 10
+        min: null
+        max: null
+        message: Valor Requerido
+    -
+      title: ImportePago
+      field: ImportePago
+      filter: NO
+      list: NO
+      form: YES
+      link:
+        route: null
+        param: null
+        title: null
+        target: null
+        link: null
+      default: 0.00
+      validator:
+        nullable: NO
+        type: decimal
+        length: 10
+        min: null
+        max: null
+        message: Valor Requerido
+    -
+      title: ImporteRenovacion
+      field: ImporteRenovacion
+      filter: NO
+      list: NO
+      form: YES
+      link:
+        route: null
+        param: null
+        title: null
+        target: null
+        link: null
+      default: 0.00
+      validator:
+        nullable: NO
+        type: decimal
+        length: 10
+        min: null
+        max: null
+        message: Valor Requerido
+    -
+      title: ImporteRecuperacion
+      field: ImporteRecuperacion
+      filter: NO
+      list: NO
+      form: YES
+      link:
+        route: null
+        param: null
+        title: null
+        target: null
+        link: null
+      default: 0.00
+      validator:
+        nullable: NO
+        type: decimal
+        length: 10
+        min: null
+        max: null
+        message: Valor Requerido
+    -
+      title: Clave
+      field: Clave
+      filter: NO
+      list: NO
+      form: YES
+      link:
+        route: null
+        param: null
+        title: null
+        target: null
+        link: null
+      default:
+      validator:
+        nullable: YES
+        type: string
+        length: 50
+        min: null
+        max: null
+        message: Valor Requerido
+    -
+      title: Fecha Vcto
+      field: FechaVcto
+      filter: NO
+      list: YES
+      form: YES
+      link:
+        route: null
+        param: null
+        title: null
+        target: null
+        link: null
+      default: 0000-00-00
+      aditional_filter:
+        order: 9
+        caption: Fecha Vcto
+        type: range
+        operator: >=
+      validator:
+        nullable: NO
+        type: date
+        length: 10
+        min: null
+        max: null
+        message: Valor Requerido
+    -
+      title: Captación
+      field: IDCaptacion
+      filter: NO
+      list: NO
+      form: YES
+      link:
+        route: null
+        param: null
+        title: null
+        target: null
+        link: null
+      default: 1
+      aditional_filter:
+        order: 11
+        caption: Captación
+        entity: CaptacionTipos
+        method: fetchAll
+        params: Captacion
+        type: select
+        operator: =
+        event: null
+      validator:
+        nullable: NO
+        type: integer
+        length: 4
+        min: 1
+        max: 9999
+        message: Valor Requerido

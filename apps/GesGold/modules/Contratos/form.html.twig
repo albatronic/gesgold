@@ -1,0 +1,167 @@
+{# TEMPLATE Contratos/form.html.twig #}
+{# Muestra los campos editables de la entidad #}
+
+
+{% if not datos.IDContrato %}
+    {% set sucursalDefecto = suc %}
+{% else %}
+    {% set sucursalDefecto = datos.IDSucursal.IDSucursal %}
+{% endif %}
+
+<div class="CajaIzquierda" style="height: 230px;">
+
+    <h3>{{datos.IDArticulo.IDVenta}}</h3>
+
+{% if datos.IDEstado.IDTipo == '0' %}
+    {% if datos.IDContrato %}
+    {{ macro.etiqueta('Sucursal','Etiqueta',datos.IDSucursal.Nombre) }}
+    {{ macro.etiqueta('Almacén','Etiqueta',datos.IDAlmacen.Nombre) }}
+    {% else %}
+    <div class="Item" id="div_Contratos_IDSucursal">
+        <div class="Etiqueta">Sucursal</div>
+        <select name="Contratos[IDSucursal]" id="Contratos_IDSucursal" size="1" class="Select"
+                onchange="DesplegableAjax('div_Contratos_IDContador','Contratos_IDContador','Contratos[IDContador]','contadorContratos',this.value);
+                          DesplegableAjax('div_Contratos_IDComercial','Contratos_IDComercial','Contratos[IDComercial]','comercialContratos',this.value);
+                          $('#Contratos_IDCliente').val('');
+                          $('#RazonSocial').val('');
+                         "
+        >
+        {% for value in datos.IDAgente.getSucursales(emp.IDEmpresa) %}
+            <option value="{{ value.Id }}" {% if (value.Id==sucursalDefecto) %} SELECTED {%endif%}>{{value.Value}}</option>
+        {% endfor %}
+        </select>
+    </div>
+    {% endif %}
+    {% if not datos.IDContrato %}
+    {{ macro.select('Serie','Etiqueta','Contratos[IDContador]','Contratos_IDContador',none,datos.IDContador.IDContador,datos.IDContador.fetchAll(sucursalDefecto,0),'Select') }}
+    {{ macro.select('Almacén','Etiqueta','Contratos[IDAlmacen]','Contratos_IDAlmacen',none,datos.IDAlmacen.IDAlmacen,datos.IDAgente.getAlmacenes('Nombre'),'Select') }}
+    {% endif %}
+    {{ macro.fecha('Fecha','Etiqueta','Contratos[Fecha]','Contratos_Fecha',datos.Fecha,'10','CampoFecha') }}
+    {{ macro.fecha('Fecha Vencimiento','Etiqueta','Contratos[FechaVcto]','Contratos_FechaVcto',datos.FechaVcto,'10','CampoFecha','disabled') }}
+
+    <div class="Item" id="div_Contratos_RazonSocial">
+        <div class="Etiqueta">Cliente</div>
+        <input name="Contratos[IDCliente]" id="Contratos_IDCliente" value="{{datos.IDCliente.IDCliente}}" type="hidden"/>
+        <input value="{{datos.IDCliente.RazonSocial}}" id="RazonSocial" type="text" maxlength="50" class="CampoTextoMedio" style="width: 260px;"
+               onkeyup="autoCompletar('RazonSocial','Contratos_IDCliente','RazonSocial','clientes','',['subbloque_ajax_cliente_contrato','','','clientecontrato']);"/>
+        <a href="javascript:;" target="_blank" onclick="window.open('{{app.path}}/Clientes/new','Clientes');">
+            <img src="{{app.path}}/images/new_cmd.png" width="16px" alt="Cliente Nuevo" title="Cliente Nuevo"/>
+        </a>
+    </div>
+
+    <div id="subbloque_ajax_cliente_contrato">
+        {{ macro.select('Comercial','Etiqueta','Contratos[IDComercial]','Contratos_IDComercial',none,datos.IDComercial.IDAgente,datos.IDComercial.getComerciales('',sucursalDefecto),'Select') }}
+        {{ macro.select('Forma de Pago','Etiqueta','Contratos[IDFP]','Contratos_IDFP',none,datos.IDFP.IDFP,datos.IDFP.fetchAll('Descripcion'),'Select') }}
+    </div>
+    {{ macro.select('Captación','Etiqueta','Contratos[IDCaptacion]','Contratos_IDCaptacion',none,datos.IDCaptacion.IDCaptacion,datos.IDCaptacion.fetchAll('Captacion'),'Select') }}
+    {{ macro.foco('RazonSocial') }}
+{% else %}
+    {{ macro.etiqueta('Sucursal','Etiqueta',datos.IDSucursal.Nombre) }}
+    {{ macro.etiqueta('Almacén','Etiqueta',datos.IDAlmacen.Nombre) }}
+    {{ macro.etiqueta('Fecha','Etiqueta',datos.Fecha ) }}
+    {{ macro.etiqueta('Fecha Vencimiento','Etiqueta',datos.FechaVcto ) }}
+    {{ macro.etiqueta('Cliente','Etiqueta',datos.IDCliente.RazonSocial) }}
+    {{ macro.etiqueta('Comercial','Etiqueta',datos.IDComercial.Nombre) }}
+    {{ macro.etiqueta('Forma de Pago','Etiqueta',datos.IDFP.Descripcion ) }}
+    {{ macro.etiqueta('Captación','Etiqueta',datos.IDCaptacion.Captacion ) }}
+
+    {% if datos.IDArticulo.IDVenta.IDVenta == '2'%}
+    <div style="clear: both;"></div>
+    <div style="margin-top: 10px; width: 100%; text-align: center;">
+    <input type="submit" value="Renovar" class="Comando" onclick="$('#action').val('Renovar');" />
+    <input type="submit" value="Recuperar" class="Comando" onclick="$('#action').val('Recuperar');" />
+    </div>
+    {% endif %}
+{% endif %}
+
+</div>
+
+<div class="CajaTotales" style="height: 230px;">
+    <div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+        <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+            <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a href="#tabs-1">Descripción Piezas</a></li>
+            {% if datos.IDContrato %}
+            <li class="ui-state-default ui-corner-top"><a href="#tabs-2">Histórico</a></li>
+            <li class="ui-state-default ui-corner-top"><a href="#tabs-3">Mvtos Caja</a></li>
+            <li class="ui-state-default ui-corner-top"><a href="#tabs-4">Imágenes</a></li>
+            {% endif %}
+        </ul>
+        <div id="tabs-1" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+            {{ macro.textarea(none,'Etiqueta','Contratos[DescripcionPiezas]','Contratos_DescripcionPiezas',datos.DescripcionPiezas,none,none,'TextArea')}}
+        </div>
+        {% if datos.IDContrato %}
+        <div id="tabs-2" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+            <iframe width="100%" height="170px;" scrolling="yes" style="border: 0px;"
+                src="{{app.path}}/ContratosHistorico/list/{{datos.IDContrato}}">
+            </iframe>
+        </div>
+        <div id="tabs-3" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+            <iframe width="100%" height="170px" scrolling="yes" style="border: 0px;"
+                src="{{app.path}}/CajaArqueos/listMvtosEntidad/{{values.controller}}/{{datos.IDContrato}}">
+            </iframe>
+        </div>
+        <div id="tabs-4" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+            {{ macro.documentos(values.controller,datos.getPrimaryKeyValue)}}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div style="clear: both;"></div>
+
+<div class='Listado'>
+    <table width='100%'>
+        <tr class='Titulos'>
+            <td class='Item'>Código</td>
+            <td class='Item'>Descripcion</td>
+            <td class='Item'>Peso Bruto</td>
+            <td class='Item'>Tara</td>
+            <td class='Item'>Peso Neto</td>
+            <td class='Item'>Precio Gramo</td>
+            <td class='Item'>Importe Pago</td>
+        </tr>
+        <tbody class="Cuerpo">
+        <tr>
+            <td>
+                <input name="Contratos[IDArticulo]" value="{{datos.IDArticulo.IDArticulo}}" id="Contratos_IDArticulo" type="hidden" />
+                <input value="{{datos.IDArticulo.Codigo}}" id="Codigo" type="text" maxlength="25" style="width:60px;"
+                       onkeyup="autoCompletar('Codigo','Contratos_IDArticulo','Contratos_Descripcion','articulos','','');"/>
+            </td>
+            <td><input name="Contratos[Descripcion]" id="Contratos_Descripcion" value="{{datos.Descripcion}}" type="text" maxlength="255" style="width:370px;"  /></td>
+            <td align="center"><input name="Contratos[PesoBruto]" id="Bruto" value="{{datos.PesoBruto}}" type="text" style="width:50px;text-align:right;" onchange="recalcula();"/></td>
+            <td align="center"><input name="Contratos[Tara]" id="Tara" value="{{datos.Tara}}" type="text" style="width:50px;text-align:right;" onchange="recalcula();" /></td>
+            <td align="center"><input name="Contratos[PesoNeto]" id="Neto" value="{{datos.PesoNeto}}" type="text" style="width:50px;text-align:right;" readonly/></td>
+            <td align="center"><input name="Contratos[PrecioGramo]" id="PrecioGramo" value="{{datos.PrecioGramo}}" type="text" style="width:50px;text-align:right;" onchange="recalcula();" /></td>
+            <td align="center"><input name="Contratos[ImportePago]" id="Importe" value="{{datos.ImportePago}}" type="text" style="width:70px;text-align:right;" readonly /></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+{% if datos.IDArticulo.IDVenta.IDVenta == '2'%}
+<div class='Listado'>
+    <table width='100%'>
+        <tr class='Titulos'>
+            <td class='Item'>% Alta</td>
+            <td class='Item'>Importe Recuperación</td>
+            <td class='Item'>Importe Renovación</td>
+        </tr>
+        <tbody class="Cuerpo">
+        <tr>
+            <td align="center"><input name="Contratos[PorcentajeAlta]" id="Bruto" value="{{datos.PorcentajeAlta}}" type="text" style="width:50px;text-align:right;" readonly/></td>
+            <td align="center"><input name="Contratos[ImporteRecuperacion]" id="Tara" value="{{datos.ImporteRecuperacion}}" type="text" style="width:70px;text-align:right;" readonly /></td>
+            <td align="center"><input name="Contratos[ImporteRenovacion]" id="Neto" value="{{datos.ImporteRenovacion}}" type="text" style="width:70px;text-align:right;" readonly/></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+<script language='JavaScript' type="text/javascript">
+    function recalcula() {
+        var neto = $('#Bruto').val() - $('#Tara').val();
+
+        $('#Neto').val(neto);
+        $('#Importe').val(neto * $('#PrecioGramo').val());
+    }
+</script>

@@ -1,0 +1,258 @@
+# Module: Contratos
+# Document : modules\Contratos\listados.yml
+#
+# @author Sergio Pérez <sergio.perez@albatronic.com>
+# @copyright INFORMATICA ALBATRONIC SL
+# @since 12.04.2012 17:43:58
+#
+---
+listados:
+  -
+    title: Contratos X Sucursal
+    order_by: IDSucursal,NumeroContrato ASC
+    break_field: IDSucursal
+    idPerfil: null
+    orientation: P
+    unit: mm
+    format: A4
+    margins: 10, 10, 15, 10
+    body_font: Courier, ,8
+    columns:
+      -
+        title: Numero
+        field: NumeroContrato
+        length: 10
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Fecha
+        field: Fecha
+        length: 10
+        align: R
+        type: date
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Cliente
+        field: IDCliente
+        length: 29
+        align: L
+        type: integer
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Descripción
+        field: Descripcion
+        length: 25
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Grs.Neto
+        field: PesoNeto
+        length: 8
+        align: R
+        type: decimal
+        total: YES
+        formula: null
+        format: %01.2f
+      -
+        title: Grs.Brut
+        field: PesoBruto
+        length: 8
+        align: R
+        type: decimal
+        total: YES
+        formula: null
+        format: %01.2f
+      -
+        title: Precio
+        field: PrecioGramo
+        length: 6
+        align: R
+        type: decimal
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Pagado
+        field: ImportePago
+        length: 10
+        align: R
+        type: decimal
+        total: YES
+        formula: null
+        format: %01.2f
+  -
+    title: Contratos X Tipo Captación
+    order_by: IDCaptacion,NumeroContrato ASC
+    break_field: IDCaptacion
+    idPerfil: null
+    orientation: P
+    unit: mm
+    format: A4
+    margins: 10, 10, 15, 10
+    body_font: Courier, ,8
+    columns:
+      -
+        title: Numero
+        field: NumeroContrato
+        length: 10
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Fecha
+        field: Fecha
+        length: 10
+        align: R
+        type: date
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Cliente
+        field: IDCliente
+        length: 29
+        align: L
+        type: integer
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Descripción
+        field: Descripcion
+        length: 25
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Grs.Neto
+        field: PesoNeto
+        length: 8
+        align: R
+        type: decimal
+        total: YES
+        formula: null
+        format: %01.2f
+      -
+        title: Grs.Brut
+        field: PesoBruto
+        length: 8
+        align: R
+        type: decimal
+        total: YES
+        formula: null
+        format: %01.2f
+      -
+        title: Precio
+        field: PrecioGramo
+        length: 6
+        align: R
+        type: decimal
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Pagado
+        field: ImportePago
+        length: 10
+        align: R
+        type: decimal
+        total: YES
+        formula: null
+        format: %01.2f
+  -
+    title: Contratos X Usuario
+    order_by: IDAgente,NumeroContrato ASC
+    break_field: IDAgente
+    idPerfil: null
+    orientation: P
+    unit: mm
+    format: A4
+    margins: 10, 10, 15, 10
+    body_font: Courier, ,8
+    columns:
+      -
+        title: Numero
+        field: NumeroContrato
+        length: 10
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Fecha
+        field: Fecha
+        length: 10
+        align: R
+        type: date
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Cliente
+        field: IDCliente
+        length: 29
+        align: L
+        type: integer
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Descripción
+        field: Descripcion
+        length: 25
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Grs.Neto
+        field: PesoNeto
+        length: 8
+        align: R
+        type: decimal
+        total: YES
+        formula: null
+        format: %01.2f
+      -
+        title: Grs.Brut
+        field: PesoBruto
+        length: 8
+        align: R
+        type: decimal
+        total: YES
+        formula: null
+        format: %01.2f
+      -
+        title: Precio
+        field: PrecioGramo
+        length: 6
+        align: R
+        type: decimal
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Pagado
+        field: ImportePago
+        length: 10
+        align: R
+        type: decimal
+        total: YES
+        formula: null
+        format: %01.2f

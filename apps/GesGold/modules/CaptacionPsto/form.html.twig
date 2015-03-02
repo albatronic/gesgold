@@ -1,0 +1,49 @@
+{# TEMPLATE CaptacionPsto/form.html.twig #}
+{# Muestra los campos editables de la entidad #}
+{% extends 'CaptacionPsto/index.html.twig' %}
+
+{% set puntero = 0 %}
+
+{% block listado %}
+
+<div class='Listado'>
+    <table width='100%'>
+        <tr class='Titulos'>
+            <td class='Item'>Año</td>
+            <td class='Item'>Presupuesto</td>
+            <td>&nbsp;</td>
+        </tr>
+
+        <tbody class="Cuerpo">
+            {% for key,objeto in values.listado.data %}
+            {% set puntero = key %}
+            <form name="linea{{puntero}}" action="" method="POST">
+            <input name="controller" value="CaptacionPsto" type="hidden" />
+            <input name="action" id="action" value="edit" type="hidden" />
+            <input name="CaptacionPsto[IDCaptacion]" value="{{ values.linkBy.value }}" type="hidden" />
+            <input name="CaptacionPsto[Id]" value="{{ objeto.Id }}" type="hidden" />
+            <input name="accion" id="accion{{puntero}}" value="" type="hidden" />
+            <tr class="ItemListado">
+                <td align="center">
+                    {{ macro.input(none,'Etiqueta','text','CaptacionPsto[Ano]','CaptacionPsto_Ano' ~ puntero,objeto.Ano,'4','CampoImporte') }}
+                </td>
+                </td>
+                <td align="center">
+                    {{ macro.input(none,'Etiqueta','text','CaptacionPsto[Presupuesto]','CaptacionPsto_Presupuesto' ~ puntero,objeto.Presupuesto,'10','CampoImporte') }}
+                </td>
+                <td align="center">
+                    {% if objeto.Id > 0 %}
+                    <input type="image" src="{{app.path}}/images/botonsave.png" onclick="getElementById('accion{{puntero}}').value='G';" alt="Guardar" title="Guardar Linea" />
+                    <input type="image" src="{{app.path}}/images/papelera.gif" onclick="if (!confirm('Desea eliminar la línea?')) {return false;} else {getElementById('accion{{puntero}}').value='B';}" alt="Borrar" title="Borrar Linea" />
+                        {% else %}
+                    <input type="image" src="{{app.path}}/images/nuevo.png" onclick="getElementById('action').value='new';" alt="Nuevo" title="Crear Linea" />
+                    {% endif %}
+                </td>
+            </tr>
+            </form>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{{ macro.foco('CaptacionPsto_Ano0') }}
+{% endblock %}

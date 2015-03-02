@@ -1,0 +1,52 @@
+{# TEMPLATE MvtosAlmacen/form.html.twig #}
+{# Muestra los campos editables de la entidad        #}
+
+<div style="float: left; width: 49%">
+{{ macro.etiqueta('Tipo','Etiqueta',datos.IDTipo,25) }}
+{{ macro.etiqueta('Fecha','Etiqueta',datos.Fecha) }}
+{{ macro.etiqueta('Hora','Etiqueta',datos.Hora) }}
+{{ macro.etiqueta('Usuario','Etiqueta',datos.IDAgente) }}
+{{ macro.etiqueta('Almacén','Etiqueta',datos.IDAlmacen) }}
+{# macro.etiqueta('Ubicación','Etiqueta',datos.IDUbicacion) #}
+{# macro.etiqueta('Lote','Etiqueta',datos.IDLote) #}
+{{ macro.etiqueta('Artículo','Etiqueta',datos.IDArticulo.Codigo ~ ' ' ~ datos.IDArticulo) }}
+{{ macro.etiqueta('Descripción','Etiqueta',datos.Descripcion) }}
+{{ macro.etiqueta('Documento','Etiqueta',datos.getNumeroDocumento) }}
+</div>
+
+<div style="float: left; width: 49%">
+    <div class='Listado' style="border: 1px dotted;">
+    <table width="100%">
+        <tr class='Titulos'>
+            <td class='Item'>&nbsp;</td>
+            <td class='Item'>{{datos.IDArticulo.UMA}}</td>
+        </tr>
+        <tbody class="Cuerpo">
+        <tr class="ItemListado">
+            <td class='Item'>Entrada</td>
+            <td align="right">{{datos.UnidadesE}}</td>
+        </tr>
+        <tr class="ItemListado">
+            <td class='Item'>Salida</td>
+            <td align="right">{{datos.UnidadesS}}</td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+
+    <div style="font-size: 10px; margin-top: 15px;">
+    <div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+        <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+            <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a href="#tabs-1">Observaciones</b></a></li>
+            <li class="ui-state-default ui-corner-top"><a href="#tabs-2">Documentos</b></a></li>
+        </ul>
+        <div id="tabs-1" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+            {{ macro.textarea(none,'Etiqueta','MvtosAlmacen[Observaciones]','MvtosAlmacen_Observaciones',datos.Observaciones,none,none,'TextArea')}}
+        </div>
+        <div id="tabs-2" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+            {{ macro.documentos(values.controller,datos.getPrimaryKeyValue)}}
+        </div>
+    </div>
+    </div>
+
+</div>

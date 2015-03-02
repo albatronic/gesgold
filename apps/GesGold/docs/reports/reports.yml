@@ -1,0 +1,264 @@
+# FORMATOS DE INFORMES.
+# docs/docsXXX/reports/reports.yml
+#
+# @author: Sergio Perez <sergio.perez@albatronic.com>
+# @copyright: Informatica ALBATRONIC
+# @date: 19-05-2012
+#
+---
+reports:
+  -
+    title: 'Libro de compra-venta de objetos usados: Metales y Piedras Preciosas'
+    comment:
+    idPerfil: null
+    break_field: Sucursal
+    orientation: L
+    unit: mm
+    format: A4
+    margins: '10,10,15,10'
+    print_total_records: true
+    print_interline: '.'
+    query: >
+      SELECT
+        s.Nombre as Sucursal,
+        DATE_FORMAT(a.Fecha,'%d/%m/%Y') as FechaContrato,
+        CONCAT(c.RazonSocial,'\n',DATE_FORMAT(c.FechaNacimiento,'%d/%m/%Y'),' ',pais.Pais,'\n',c.Direccion,'\n',c.Poblacion,' ',prov.Provincia) as DatosCliente,
+        prov.Provincia,
+        pais.Pais,
+        a.*,
+        c.*
+      FROM
+        gesgold_ppuerp<?php echo $_SESSION['emp'];?>.contratos as a,
+        gesgold_ppuerp<?php echo $_SESSION['emp'];?>.clientes as c,
+        gesgold_ppuemp.sucursales as s,
+        gesgold_ppuemp.provincias as prov,
+        gesgold_ppuemp.paises as pais
+      WHERE a.IDSucursal='SUCURSAL'
+      AND a.Fecha>='DESDEFECHA'
+      AND a.Fecha<='HASTAFECHA'
+      AND a.IDEstado LIKE 'ESTADO%'
+      AND a.IDSucursal=s.IDSucursal
+      AND a.IDCliente=c.IDCliente
+      AND c.IDProvincia=prov.IDProvincia
+      AND c.IDPais=pais.IDPais
+      ORDER BY a.IDSucursal,a.Fecha,a.NumeroContrato ASC
+    filters:
+      -
+        field: SUCURSAL
+        caption: Sucursal
+        entity: 'Agentes,<?php echo $_SESSION['USER']['user']['id'];?>'
+        method: getSucursales
+        params:
+        type: select
+        default: '<?php echo $_SESSION['suc'];?>'
+      -
+        field: DESDEFECHA
+        caption: Desde Fecha
+        entity:
+        method:
+        params:
+        type: date
+        default: '01/01/<?echo date('Y');?>'
+      -
+        field: HASTAFECHA
+        caption: Hasta Fecha
+        entity:
+        method:
+        params:
+        type: date
+        default: '31/12/<?echo date('Y');?>'
+      -
+        field: ESTADO
+        caption: Estado
+        entity: EstadosContratos
+        method: fetchAll
+        params:
+        type: select
+        default: 2
+    columns:
+      -
+        title: FECHA
+        field: FechaContrato
+        length: 11
+        align: L
+        type: integer
+        total: NO
+        formula: null
+        format: null
+      -
+        title: N.CONTRATO
+        field: NumeroContrato
+        length: 13
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+      -
+        title: VENDEDOR
+        field: DatosCliente
+        length: 45
+        align: L
+        type: text
+        total: NO
+        formula: null
+        format: null
+      -
+        title: NIF
+        field: Cif
+        length: 12
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+      -
+        title: DETALLE OPERACIÓN COMPRA-VENTA
+        field: DescripcionPiezas
+        length: 55
+        align: L
+        type: text
+        total: NO
+        formula: null
+        format: null
+      -
+        title: PESO GRS
+        field: PesoNeto
+        length: 7
+        align: R
+        type: integer
+        total: NO
+        formula: null
+        format: null
+      -
+        title: PRECIO
+        field: ImportePago
+        length: 10
+        align: R
+        type: integer
+        total: NO
+        formula: null
+        format: null
+  -
+    title: Movimientos de caja entre fechas
+    comment: Muestra los movimientos de caja ocurridos en un rango de fechas
+    idPerfil: null
+    break_field: NombreSucursal
+    orientation: P
+    unit: mm
+    format: A4
+    margins: '10,10,15,10'
+    print_total_records: false
+    print_interline: 
+    query: >
+      SELECT s.IDSucursal,
+             s.Nombre as NombreSucursal,
+             t.Nombre as NombreTpv,
+             DATE_FORMAT(l.Fecha,'%d/%m/%Y') as Fecha,
+             DATE_FORMAT(l.Fecha,'%H:%i:%s') as Hora,
+             l.Concepto,
+             l.Importe,
+             f.Descripcion
+      FROM gesgold_ppuerp<?php echo $_SESSION['emp'];?>.caja_arqueos as a,
+           gesgold_ppuerp<?php echo $_SESSION['emp'];?>.caja_lineas as l,
+           gesgold_ppuerp<?php echo $_SESSION['emp'];?>.tpvs as t,
+           gesgold_ppuerp<?php echo $_SESSION['emp'];?>.formas_pago as f,
+           gesgold_ppuemp.sucursales as s
+      WHERE a.IDArqueo=l.IDArqueo
+            AND a.IDSucursal=s.IDSucursal
+            AND a.IDTpv=t.IDTpv
+            AND l.IDFP=f.IDFP
+            AND a.IDSucursal='SUCURSAL'
+            AND a.IDTpv='TPV'
+            AND a.Dia>='DESDEFECHA'
+            AND a.Dia<='HASTAFECHA'
+      ORDER BY a.IDSucursal,a.IDTpv,Fecha,Hora ASC
+    filters:
+      -
+        field: SUCURSAL
+        caption: Sucursal
+        entity: 'Agentes,<?php echo $_SESSION['USER']['user']['id'];?>'
+        method: getSucursales
+        params:
+        type: select
+        default: '<?php echo $_SESSION['suc'];?>'
+      -
+        field: TPV
+        caption: Tpv
+        entity: 'Sucursales,<?php echo $_SESSION['suc'];?>'
+        method: getTpvs
+        params:
+        type: select
+        default: '<?php echo $_SESSION['tpv'];?>'        
+      -
+        field: DESDEFECHA
+        caption: Desde Fecha
+        entity:
+        method:
+        params:
+        type: date
+        default: '01/01/<?echo date('Y');?>'
+      -
+        field: HASTAFECHA
+        caption: Hasta Fecha
+        entity:
+        method:
+        params:
+        type: date
+        default: '31/12/<?echo date('Y');?>'
+    columns:
+      -
+        title: Tpv
+        field: NombreTpv
+        length: 15
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Fecha
+        field: Fecha
+        length: 11
+        align: C
+        type: date
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Hora
+        field: Hora
+        length: 9
+        align: C
+        type: string
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Concepto
+        field: Concepto
+        length: 37
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Importe
+        field: Importe
+        length: 14
+        align: R
+        type: money
+        total: YES
+        formula: null
+        format: %.2n
+      -
+        title: Forma Pago
+        field: Descripcion
+        length: 22
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+    grafico:

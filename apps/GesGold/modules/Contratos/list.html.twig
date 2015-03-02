@@ -1,0 +1,55 @@
+{# Template list.html.twig for Contratos #}
+{# -------------------------------------------------------#}
+{% extends values.controller  ~ '/index.html.twig' %}
+
+{% block listado %}
+<div class='Listado'>
+
+	{% include '_global/paginacion.html.twig' with {'filter':values.listado.filter,'controller': values.controller,'position':'izq'}%}
+        <div id="Listado">
+        <table width="100%">
+            <tr class='Titulos'>
+                <td></td>
+                <td class='Item'>Contrato</td>
+                <td class='Item'>Sucursal</td>
+                <td class='Item'>Tipo</td>
+                <td class='Item'>Fecha</td>
+                <td class='Item'>Cliente</td>
+                <td class='Item'>Agente</td>
+                <td class='Item'>Comercial</td>
+                <td class='Item'>Estado</td>
+                <td class='Item'>Fecha Vcto</td>
+                <td class='Item'>Importe Pago</td>
+            </tr>
+
+            <tbody class='Cuerpo'>
+            {% for key,objeto in values.listado.data %}
+            <tr>
+                <td class='Item'>
+                    <a href="{{app.path}}/Contratos/edit/{{objeto.IDContrato}}" title="Editar...">
+                        <img src="{{app.path}}/images/botoneditar.png" width="16px" height="16px" />
+                    </a>
+                </td>
+                <td class='Item'>
+                    <a href="{{app.path}}/Contratos/edit/{{objeto.IDContrato}}" title="Editar...">
+                        {{objeto.NumeroContrato}}
+                    </a>
+                </td>
+                <td class='Item'>{{objeto.IDSucursal.Nombre|slice(0,10)}}</td>
+                <td class='Item'>{{objeto.IDArticulo.IDVenta|slice(0,20)}}</td>
+                <td class='Item'>{{objeto.Fecha}}</td>
+                <td class='Item'>{{objeto.IDCliente.RazonSocial|slice(0,35)}}</td>
+                <td class='Item'>{{objeto.IDAgente.Nombre|slice(0,10)}}</td>
+                <td class='Item'>{{objeto.IDComercial.Nombre|slice(0,10)}}</td>
+                <td class='Item'>{{objeto.IDEstado|slice(0,15)}}</td>
+                <td class='Item'>{{objeto.FechaVcto}}</td>
+                <td class='Item' align='right'>{{objeto.ImportePago}}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan='2'>No hay informaci&oacute;n que cumpla esos criterios</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+</div>
+{% endblock %}

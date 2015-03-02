@@ -1,0 +1,13 @@
+# REGLAS DE ENRUTAMIENTO PARA LAS URLs AMIGABLES
+---
+default:
+  module: AlbaranesCab
+  action: list
+
+lista_clientes:
+  module: Clientes
+  action: list
+
+crear_cliente:
+  module: Clientes
+  action: new

@@ -1,0 +1,11 @@
+nbproject
+log
+backup
+app/tmp
+app/log
+app/config/config.yml
+apps/GesGold/tmp
+apps/GesGold/log
+apps/GesGold/config/config.yml
+apps/GesGold/docs/docs*
+

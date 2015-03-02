@@ -1,0 +1,29 @@
+# Module: CaptacionTipos
+# Document : modules\CaptacionTipos\listados.yml
+#
+# @author Sergio Pérez <sergio.perez@albatronic.com>
+# @copyright INFORMATICA ALBATRONIC SL
+# @since 25.04.2012 12:27:12
+#
+---
+listados:
+  -
+    title: Tipos de Captacion de Clientes
+    order_by: IDCaptacion ASC
+    break_field: null
+    idPerfil: null
+    orientation: P
+    unit: mm
+    format: A4
+    margins: 10, 10, 15, 35
+    body_font: Courier, ,8
+    columns:
+      -
+        title: Captacion
+        field: Captacion
+        length: 50
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null

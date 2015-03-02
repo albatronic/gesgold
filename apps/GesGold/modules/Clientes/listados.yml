@@ -1,0 +1,414 @@
+# Module: Clientes
+#
+# @author Sergio Perez <sergio.perez@albatronic.com>
+# @copyright Informatica ALBATRONIC
+# @since: 27-11-2011
+#
+---
+listados:
+  - 
+    title: Clientes
+    order_by: RazonSocial ASC
+    break_field: null
+    idPerfil: null
+    orientation: P
+    unit: mm
+    format: A4
+    margins: 10, 10, 15, 10
+    print_interline: 
+    body_font: Courier,,8
+    columns:
+      - 
+        title: Razon Social
+        field: RazonSocial
+        length: 43
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+      - 
+        title: Direccion
+        field: Direccion
+        length: 35
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+      - 
+        title: Poblacion
+        field: Poblacion
+        length: 15
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+      - 
+        title: Provincia
+        field: IDProvincia
+        length: 8
+        align: L
+        type: integer
+        total: NO
+        formula: null
+        format: null
+      - 
+        title: Telefono
+        field: Telefono
+        length: 9
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+  - 
+    title: Clientes por Comercial
+    order_by: IDComercial,RazonSocial ASC
+    break_field: IDComercial
+    break_page: YES
+    idPerfil: null
+    orientation: P
+    unit: mm
+    format: A4
+    margins: 10, 10, 15, 10
+    body_font: Courier,,8
+    columns:
+      - 
+        title: Codigo
+        field: IDCliente
+        length: 8
+        align: R
+        type: string
+        total: NO
+        formula: null
+        format: null
+      - 
+        title: Razon Social
+        field: RazonSocial
+        length: 40
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+      - 
+        title: Nombre Comercial
+        field: NombreComercial
+        length: 35
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+      - 
+        title: Riesgo
+        field: LimiteRiesgo
+        length: 10
+        align: R
+        type: integer
+        total: NO
+        formula: null
+        format: null
+      - 
+        title: Telefono
+        field: Telefono
+        length: 9
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+  - 
+    title: Clientes por Zona
+    order_by: IDZona, RazonSocial ASC
+    break_field: IDZona
+    break_page: NO
+    idPerfil: null
+    orientation: P
+    unit: mm
+    format: A4
+    margins: 10, 10, 15, 10
+    body_font: Courier,,8
+    columns:
+      - 
+        title: Codigo
+        field: IDCliente
+        length: 8
+        align: R
+        type: string
+        total: NO
+        formula: null
+        format: null
+      - 
+        title: Razon Social
+        field: RazonSocial
+        length: 40
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+      - 
+        title: Nombre Comercial
+        field: NombreComercial
+        length: 35
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+      - 
+        title: Telefono
+        field: Telefono
+        length: 9
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+      - 
+        title: Movil
+        field: Movil
+        length: 9
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+  - 
+    title: Clientes por Grupo de cliente
+    order_by: IDGrupo, RazonSocial ASC
+    break_field: IDGrupo
+    break_page: NO
+    idPerfil: null
+    orientation: P
+    unit: mm
+    format: A4
+    margins: 10, 10, 15, 10
+    body_font: Courier,,8
+    columns:
+      - 
+        title: Razon Social
+        field: RazonSocial
+        length: 40
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+      - 
+        title: Nombre Comercial
+        field: NombreComercial
+        length: 35
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+      - 
+        title: Telefono
+        field: Telefono
+        length: 9
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+      - 
+        title: Comercial
+        field: IDComercial
+        length: 25
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+  - 
+    title: Clientes por Tarifa
+    order_by: IDTarifa,RazonSocial ASC
+    break_field: IDTarifa
+    break_page: YES
+    idPerfil: null
+    orientation: P
+    unit: mm
+    format: A4
+    margins: 10, 10, 15, 10
+    body_font: Courier,,8
+    columns:
+      - 
+        title: Codigo
+        field: IDCliente
+        length: 8
+        align: R
+        type: string
+        total: NO
+        formula: null
+        format: null
+      - 
+        title: Razon Social
+        field: RazonSocial
+        length: 40
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+      - 
+        title: Nombre Comercial
+        field: NombreComercial
+        length: 35
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+      - 
+        title: Riesgo
+        field: LimiteRiesgo
+        length: 10
+        align: R
+        type: integer
+        total: NO
+        formula: null
+        format: null
+      - 
+        title: Comercial
+        field: IDComercial
+        length: 20
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+  -
+    title: Clientes con Codigo y Riesgo
+    order_by: RazonSocial ASC
+    break_field: null
+    idPerfil: null
+    orientation: L
+    unit: mm
+    format: A4
+    margins: 10, 10, 15, 10
+    body_font: Courier,,8
+    columns:
+      -
+        title: Codigo
+        field: IDCliente
+        length: 8
+        align: R
+        type: string
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Razon Social
+        field: RazonSocial
+        length: 40
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Direccion
+        field: Direccion
+        length: 35
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Poblacion
+        field: Poblacion
+        length: 15
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Provincia
+        field: IDProvincia
+        length: 8
+        align: L
+        type: integer
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Telefono
+        field: Telefono
+        length: 9
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Riesgo
+        field: LimiteRiesgo
+        length: 10
+        align: R
+        type: integer
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Comercial
+        field: IDComercial
+        length: 20
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+  -
+    title: Clientes con Cuenta Contable
+    order_by: IDSucursal,RazonSocial ASC
+    break_field: IDSucursal
+    idPerfil: null
+    orientation: P
+    unit: mm
+    format: A4
+    margins: 10, 10, 15, 10
+    body_font: Courier,,8
+    columns:
+      -
+        title: Cta.Contable
+        field: CContable
+        length: 10
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Cif
+        field: Cif
+        length: 15
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Razon Social
+        field: RazonSocial
+        length: 40
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Nombre Comercial
+        field: NombreComercial
+        length: 35
+        align: L
+        type: string
+        total: NO
+        formula: null
+        format: null

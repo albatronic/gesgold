@@ -1,0 +1,607 @@
+# FORMATOS DE CONTRATOS DE COMPRA
+# docs/docsXXX/formats/contratos.yml
+#
+# @author Sergio Perez <sergio.perez@albatronic.com>
+# @copyright Informatica ALBATRONIC
+# @since: 05-12-2011
+#
+---
+contratos:
+  -
+    title: Contrato
+    idPerfil: null
+    orientation: P
+    unit: mm
+    format: A4
+    margins: '10,10,15,15'
+    page_break: 10
+    header:
+      # -- Logo --
+      - $this->Image($this->empresa->getLogo(),10,10,40)
+      - $this->Ln(20)
+    body:
+      # PRIMERA PAGINA
+      - $this->SetFont('Arial','B',10)
+      - $this->Cell(0,7,'CONTRATO DE ' . $this->master->getDescripcion(),1,1,'C')
+      # Rectangulos
+      - $this->Rect(15, $this->GetY(), 90, 20)
+      - $this->Rect(105, $this->GetY(), 95, 20)
+      - $this->Rect(15, $this->GetY()+20, 185, 20)
+      - $this->Rect(15, $this->GetY()+40, 70, 35)
+      - $this->Rect(85, $this->GetY()+40, 115,35)
+      #
+      # Datos del comprador
+      #
+      - $this->SetFont('Arial','B',10)
+      - $this->SetY(37)
+      - $this->Cell(90,7,'DATOS DEL COMPRADOR:',0,1)
+      - $this->SetFont('Arial','',8)
+      - $this->Cell(90,4,$this->empresa->getRazonSocial() . ' CIF ' . $this->empresa->getCif(),0,1)
+      - $this->Cell(90,4,$this->empresa->getDireccion(),0,1)
+      - $this->Cell(90,4,$this->empresa->getPoblacion() . ' ' . $this->empresa->getTelefono(),0,1)
+      #
+      # Datos del contrato
+      #
+      - $this->SetFont('Arial','B',10)
+      - $this->SetLeftMargin(105)
+      - $this->SetY(37)
+      - $this->Cell(105,7,'FECHA Y HORA ' . $this->master->getFecha() . ' ' . substr($this->master->getCreatedAt(),-8),0,1)
+      - $this->SetFont('Arial','',8)
+      - $this->Cell(35,4,'N. Contrato ' . $this->master->getNumeroContrato(),0,0)
+      - $this->Cell(70,4,' Sucursal ' . $this->master->getIDSucursal(),0,1)
+      - $this->Cell(105,4,'Forma de pago ' . $this->master->getIDFP()->getDescripcion(),0,1)
+      - $this->Cell(105,4,'Atendido por ' . $this->master->getIDComercial()->getNombre(),0,1)
+      #
+      # Datos del vendedor
+      #
+      - $this->SetFont('Arial','B',10)
+      - $this->SetLeftMargin(15)
+      - $this->SetY(57)
+      - $this->Cell(90,7,'DATOS DEL VENDEDOR:',0,1)
+      - $this->SetFont('Arial','',8)
+      - $this->Cell(90,4,'Nombre ' . $this->master->getIDCliente(),0,1)
+      - $this->Cell(90,4,'DNI/Pasaporte ' . $this->master->getIDCliente()->getCif(),0,1)
+      - $this->Cell(90,4,'Dirección ' . $this->master->getIDCliente()->getDireccion(),0,1)
+      - $this->SetLeftMargin(105)
+      - $this->SetY(57)
+      - $this->Cell(45,5,'Fecha Liberación ' . $this->master->getFechaVcto(),0,0)
+      - $this->Cell(60,5,'C.P. ' . $this->master->getIDCliente()->getCodigoPostal(),0,1)
+      - $this->Cell(105,5,'Población ' . $this->master->getIDCliente()->getPoblacion(),0,1)
+      - $this->Cell(55,5,'Provincia ' . $this->master->getIDCliente()->getIDProvincia(),0,0)
+      - $this->Cell(50,5,'Nacionalidad ' . $this->master->getIDCliente()->getIDPais(),0,1)
+      - $this->Cell(45,5,'Teléfono ' . $this->master->getIDCliente()->getTelefono(),0,0)
+      - $this->Cell(60,5,' F. Nacimiento ' . $this->master->getIDCliente()->getFechaNacimiento(), 0, 1)
+      #
+      # Datos de Tasacion
+      #
+      - $this->SetFont('Arial','B',10)
+      - $this->SetLeftMargin(15)
+      - $this->SetY(77)
+      - $this->Cell(70,7,'DATOS TASACIÓN:',0,1)
+      - $this->SetFont('Arial','',9)
+      - $this->Cell(35,10,'GRAMOS:',0,0)
+      - $this->Cell(35,10,$this->master->getPesoNeto() . ' grs',0,1,'R')
+      - $this->Cell(35,10,'PRECIO POR GRAMO:',0,0)
+      - $this->Cell(35,10,$this->master->getPrecioGramo() . ' E',0,1,'R')
+      - $this->Cell(35,10,'TOTAL A PAGAR:',0,0)
+      - $this->Cell(35,10,$this->master->getImportePago() . ' E',0,1,'R')
+      #
+      # Descripcion de piezas
+      #
+      - $this->SetFont('Arial','B',10)
+      - $this->SetLeftMargin(85)
+      - $this->SetY(77)
+      - $this->Cell(115,5,'DESCRIPCIÓN PIEZAS:',0,1)
+      - $this->SetFont('Arial','',6)
+      - $this->Cell(115,5,'Descrito en el libro oficial de "registro" de conformidad al Real Decreto 197/1988 de 22 de febrero',0,1)
+      - $this->SetFont('Arial','',9)
+      - $this->MultiCell(115,4,$this->master->getDescripcionPiezas(),0,'J')
+      - $this->SetXY(15,112)
+      - $this->SetFont('Arial','',6)
+      - $this->MultiCell(0,3,utf8_encode('El VENDEDOR declara que las piezas reseñadas son de su propiedad, adquiridas de forma lícita y se hallan libres de cargas. El VENDEDOR da su conformidad al precio de tasación indicado, sirviendo la presente de las más eficaz carta de pago.'),0,1,'J')
+      - $this->Ln(10)
+      #
+      # Dni de cliente
+      #
+      - $dni = $this->master->getIDCliente()->getDocuments()
+      - if ($dni[0]) $this->Image($dni[0]->getRelativePath(),15,$this->getY(),90,50)
+      - if ($dni[1]) $this->Image($dni[1]->getRelativePath(),110,$this->getY(),90,50)
+      - $this->SetXY(15,$this->GetY()+55)
+      - $this->Cell(90,5,'CLIENTE',0,0,'C')
+      - $this->Cell(0,5,'LA EMPRESA',0,1,'C')
+      - $this->Ln(30)
+      - $this->SetX(15)
+      - $this->Cell(0,5,'Nombre ' . $this->master->getIDCliente(),0,1)
+      - $this->Ln(5)
+      - $this->SetX(15)
+      - $this->MultiCell(0,3,utf8_encode('Desde la firma del presente contrato, la parte vendedora no podrá reclamar la pieza o piezas detallas anteriormente. Siendo desde este momento propiedad de la parte compradora.'))
+      - $this->Ln(5)
+      - $this->SetX(15)
+      - $this->MultiCell(0,3,utf8_encode('En cumplimiento de la LO 15/99 de 13 de diciembre, de Proteccion de Datos de Caracter Personal, le informamos de que los datos personales que nos aporte a través de este impreso o por cualquier otro documento o medio, serán incluidos en los ficheros responsabilidad de ' . $this->empresa->getRazonSocial() . ' con la finalidad de gestionar y mantener la relación con el cliente, asi como para informarle por cualquier medio incluido el correo electrónico de servicios y promociones que pudieran ser de su interes. Sus datos serán comunicados a las Fuerzas de Seguridad del Estado por estar establecio legalmente. Puede ejercer sus derechos de acceso, rectificación, cancelación u oposición dirigiendose por escrito junto con fotocopia de documento que acredite su identidad a la dirección del responsable en ') . $this->empresa->getDireccion() . ', ' . $this->empresa->getPoblacion())
+      - $this->SetX(15)
+      - $this->MultiCell(0,3,utf8_encode('Las partes se someten expresamente a los Tribunales de esta ciudad, ') . $this->master->getIDSucursal()->getPoblacion() . ', con renuncia a cualquier otro fuero.')
+      #
+      # RESGUARDO PIE PRIMERA PAGINA
+      #
+      - $this->SetLeftMargin(15)
+      - $this->SetY(-35)
+      - $this->Rect(15, $this->GetY(), 180, 25)
+      - $this->SetFont('Arial','',8)
+      - $this->Cell(90,5,'Lote ' . $this->master->getNumeroContrato(),0,1)
+      - $this->Cell(90,5,'Vendedor ' . $this->master->getIDCliente()->getRazonSocial(),0,1)
+      - $this->Cell(90,5,'DNI/Pasaporte ' . $this->master->getIDCliente()->getCif(),0,1)
+      - $this->Cell(90,5,'Teléfono ' . $this->master->getIDCliente()->getTelefono(),0,1)
+      - $this->Cell(90,5,'Fecha Compra ' . $this->master->getFecha(),0,1)
+      #
+      - $this->SetLeftMargin(110)
+      - $this->SetY(-35)
+      - $this->SetFont('Arial','B',10)
+      - $this->Cell(80,5,'PESO NETO ' . $this->master->getPesoNeto(),0,1)
+      - $this->SetFont('Arial','',8)
+      - $this->Cell(80,5,'Precio Gramo ' . $this->master->getPrecioGramo(),0,1)
+      - $this->Cell(80,5,'Total a Pagar ' . $this->master->getImportePago(),0,1)
+      - $this->Cell(80,5,'Peso Bruto ' . $this->master->getPesoBruto(),0,1)
+      # $this->Cell(80,5,'Fecha Liberacion ' . $this->master->getIDCliente()->getTelefono(),0,1)
+
+      #
+      # SEGUNDA PAGINA. Imágenes de las piezas
+      #
+      - foreach($this->master->getDocuments() as $pieza) {$this->AddPage(); $this->SetX(15); $this->SetFont('Arial','B',10); $this->Cell(0,6,'COPIA DE PIEZAS DEL LOTE ' . $this->master->getNumeroContrato(),1,1,'C'); $this->Ln(5); $this->Image($pieza->getRelativePath(),15,$this->getY(),180,250);}
+      #
+      # TERCERA PAGINA
+      #
+      - $this->SetLeftMargin(15)
+      - $this->AddPage()
+      - $this->SetX(15)
+      - $this->SetFont('Arial','B',10)
+      - $this->Cell(0,6,'HOJA BLANQUEO CAPITALES DEL LOTE ' . $this->master->getNumeroContrato(),1,1,'C')
+      - $this->Ln(10)
+      - $this->SetFont('Arial','',8)
+      - $this->Cell(0,4,'El vendedor declara, a los efectos de la Ley 10/2010, de 28 de abril, de prevención de blanqueo de capitales y financiación del terrorismo',0,1)
+      - $this->Ln(5)
+      - $this->Cell(150,6,'¿ El vendedor tiene residencia fiscal en paraiso fiscal ?',1,0)
+      - $this->Cell(0,6,'NO',1,1,'R')
+      - $this->MultiCell(150,4,utf8_encode('¿ El vendedor desempeña o ha desempeñado en los dos años anteriores cargo o funciones públicas importantes en un país distinto de España o es familiar próximo o allegado a personas que desempeñen o haya desempeñado estas ?'),1,'J')
+      - $this->Cell(0,6,'NO',1,1,'R')
+      - $this->Cell(150,6,'¿ Cual es el destino de los fondos obtenidos en esta operación ?',1,0)
+      - $this->Cell(0,6,'CONSUMO',1,1,'R')
+      - $this->Cell(150,6,'¿ Actua en nombre propio o de tercero ?',1,0)
+      - $this->Cell(0,6,'PROPIO',1,1,'R')
+      - $this->Cell(150,6,'¿ Cual es el origen de la mercancía ?',1,0)
+      - $this->Cell(0,6,'USO PERSONAL',1,1,'R')
+      - $this->Ln(20)
+      - $this->Cell(90,5,'CLIENTE',0,0,'C')
+      - $this->Cell(0,5,'LA EMPRESA',0,1,'C')
+      - $this->Ln(30)
+      - $this->Cell(0,5,'Nombre ' . $this->master->getIDCliente(),0,1)
+
+    footer:
+
+# CONTRATO DE EMPEÑO
+  -
+    title: Contrato de Empeño
+    idPerfil: null
+    orientation: P
+    unit: mm
+    format: A4
+    margins: '10,10,15,15'
+    page_break: 10
+    header:
+      # -- Logo --
+      - $this->Image($this->empresa->getLogo(),10,10,40)
+      - $this->Ln(20)
+    body:
+      # PRIMERA PAGINA
+      - $this->SetFont('Arial','B',10)
+      - $this->Cell(0,7,'CONTRATO DE ' . $this->master->getDescripcion() . ' CON DERECHO DE RECTRACTO',1,1,'C')
+      # Rectangulos
+      - $this->Rect(15, $this->GetY(), 90, 20)
+      - $this->Rect(105, $this->GetY(), 95, 20)
+      - $this->Rect(15, $this->GetY()+20, 185, 20)
+      - $this->Rect(15, $this->GetY()+40, 70, 35)
+      - $this->Rect(85, $this->GetY()+40, 115,35)
+      #
+      # Datos del comprador
+      #
+      - $this->SetFont('Arial','B',10)
+      - $this->SetY(37)
+      - $this->Cell(90,7,'DATOS DEL COMPRADOR:',0,1)
+      - $this->SetFont('Arial','',8)
+      - $this->Cell(90,4,$this->empresa->getRazonSocial() . ' CIF ' . $this->empresa->getCif(),0,1)
+      - $this->Cell(90,4,$this->empresa->getDireccion(),0,1)
+      - $this->Cell(90,4,$this->empresa->getPoblacion() . ' ' . $this->empresa->getTelefono(),0,1)
+      #
+      # Datos del contrato
+      #
+      - $this->SetFont('Arial','B',10)
+      - $this->SetLeftMargin(105)
+      - $this->SetY(37)
+      - $this->Cell(105,7,'FECHA Y HORA ' . $this->master->getFecha() . ' ' . substr($this->master->getCreatedAt(),-8),0,1)
+      - $this->SetFont('Arial','',8)
+      - $this->Cell(35,4,'N. Contrato ' . $this->master->getNumeroContrato(),0,0)
+      - $this->Cell(70,4,' Sucursal ' . $this->master->getIDSucursal(),0,1)
+      - $this->Cell(105,4,'Forma de pago ' . $this->master->getIDFP()->getDescripcion(),0,1)
+      - $this->Cell(105,4,'Atendido por ' . $this->master->getIDComercial()->getNombre(),0,1)
+      #
+      # Datos del vendedor
+      #
+      - $this->SetFont('Arial','B',10)
+      - $this->SetLeftMargin(15)
+      - $this->SetY(57)
+      - $this->Cell(90,7,'DATOS DEL VENDEDOR:',0,1)
+      - $this->SetFont('Arial','',8)
+      - $this->Cell(90,4,'Nombre ' . $this->master->getIDCliente(),0,1)
+      - $this->Cell(90,4,'DNI/Pasaporte ' . $this->master->getIDCliente()->getCif(),0,1)
+      - $this->Cell(90,4,'Dirección ' . $this->master->getIDCliente()->getDireccion(),0,1)
+      - $this->SetLeftMargin(105)
+      - $this->SetY(57)
+      - $this->Cell(45,5,'Fecha Liberación ' . $this->master->getFechaVcto(),0,0)
+      - $this->Cell(60,5,'C.P. ' . $this->master->getIDCliente()->getCodigoPostal(),0,1)
+      - $this->Cell(105,5,'Población ' . $this->master->getIDCliente()->getPoblacion(),0,1)
+      - $this->Cell(55,5,'Provincia ' . $this->master->getIDCliente()->getIDProvincia(),0,0)
+      - $this->Cell(50,5,'Nacionalidad ' . $this->master->getIDCliente()->getIDPais(),0,1)
+      - $this->Cell(45,5,'Teléfono ' . $this->master->getIDCliente()->getTelefono(),0,0)
+      - $this->Cell(60,5,' F. Nacimiento ' . $this->master->getIDCliente()->getFechaNacimiento(), 0, 1)
+      #
+      # Datos de Tasacion
+      #
+      - $this->SetFont('Arial','B',10)
+      - $this->SetLeftMargin(15)
+      - $this->SetY(77)
+      - $this->Cell(70,7,'DATOS TASACIÓN:',0,1)
+      - $this->SetFont('Arial','',9)
+      - $this->Cell(35,5,'GRAMOS:',0,0)
+      - $this->Cell(35,5,$this->master->getPesoNeto() . ' grs',0,1,'R')
+      - $this->Cell(35,5,'PRECIO POR GRAMO:',0,0)
+      - $this->Cell(35,5,$this->master->getPrecioGramo() . ' E',0,1,'R')
+      - $this->Cell(35,5,'TOTAL A PAGAR:',0,0)
+      - $this->Cell(35,5,$this->master->getImportePago() . ' E',0,1,'R')
+      - $this->Cell(35,5,'PENALIZACIÓN POR DEMORA:',0,0)
+      - $this->Cell(35,5,$this->master->getImporteRenovacion() . ' E',0,1,'R')      
+      - $this->Cell(35,5,'EJECUCIÓN RETRACTO:',0,0)
+      - $this->Cell(35,5,$this->master->getImporteRecuperacion() . ' E',0,1,'R')       
+      #
+      # Descripcion de piezas
+      #
+      - $this->SetFont('Arial','B',10)
+      - $this->SetLeftMargin(85)
+      - $this->SetY(77)
+      - $this->Cell(115,5,'DESCRIPCIÓN PIEZAS:',0,1)
+      - $this->SetFont('Arial','',6)
+      - $this->Cell(115,5,'Descrito en el libro oficial de "registro" de conformidad al Real Decreto 197/1988 de 22 de febrero',0,1)
+      - $this->SetFont('Arial','',9)
+      - $this->MultiCell(115,4,$this->master->getDescripcionPiezas(),0,'J')
+      - $this->SetXY(15,112)
+      - $this->SetFont('Arial','',6)
+      - $this->MultiCell(0,3,utf8_encode('El VENDEDOR declara que las piezas reseñadas son de su propiedad, adquiridas de forma lícita y se hallan libres de cargas. El VENDEDOR da su conformidad al precio de tasación indicado, sirviendo la presente de la más eficaz carta de pago.'),0,1,'J')
+      - $this->Ln(10)
+      #
+      # Dni de cliente
+      #
+      - $dni = $this->master->getIDCliente()->getDocuments()
+      - if ($dni[0]) $this->Image($dni[0]->getRelativePath(),15,$this->getY(),90,50)
+      - if ($dni[1]) $this->Image($dni[1]->getRelativePath(),110,$this->getY(),90,50)
+      - $this->SetXY(15,$this->GetY()+55)
+      - $this->SetFont('Arial','',6)      
+      - $this->MultiCell(0,3,utf8_encode('Se acuerda conceder al vendedor derecho de retracto, que deberá ejercitar como máximo en el día ' . $this->master->getFechaVcto() . '. Si el VENDEDOR ejercita el derecho de retracto, la compraventa quedará resuelta con carácter retroactivo al día de la formalización de la compra venta, y el VENDEDOR tendrá que devolver la suma de ' . $this->master->getImportePago(). ' euros recibida como precio, más la suma de ' . $this->master->getImporteRenovacion() . ' euros como cláusula penal por daños y perjuicios causados por la resolución al comprador.'))
+      - $this->Ln(5)
+      - $this->SetX(15)      
+      - $this->Cell(60,5,'CLIENTE',0,0,'C')
+      - $this->Cell(0,5,'LA EMPRESA',0,1,'C')
+      - $this->Ln(15)
+      - $this->SetX(15)
+      - $this->Cell(0,5,'Nombre ' . $this->master->getIDCliente(),0,1)
+      - $this->Ln(5)
+      - $this->SetX(15)
+      - $this->MultiCell(0,3,utf8_encode('El vendedor podrá ampliar el plazo para el ejercicio de retracto por otros 30 días naturales si dentro del plazo concedido abona como indemnización por daños y perjuicios por la demora en poder disponer del bien por parte del comprador (clausula penal) la suma de ' . $this->master->getImporteRenovacion() . ' euros, igualmente podrá ampliar sucesivamente el plazo para el ejercicio de retracto, por 30 días naturales más, si antes de cada vencimiento abona la cantidad indicada para la primera ampliación y por el mismo concepto, tras 4 años desde la fecha del contrato inicial de compraventa, finalizará el derecho de retracto.'))
+      - $this->SetX(15)
+      - $this->MultiCell(0,3,utf8_encode('En cumplimiento de la LO 15/99 de 13 de diciembre, de Proteccion de Datos de Caracter Personal, le informamos de que los datos personales que nos aporte a través de este impreso o por cualquier otro documento o medio, serán incluidos en los ficheros responsabilidad de ' . $this->empresa->getRazonSocial() . ' con la finalidad de gestionar y mantener la relación con el cliente, asi como para informarle por cualquier medio incluido el correo electrónico de servicios y promociones que pudieran ser de su interes. Sus datos serán comunicados a las Fuerzas de Seguridad del Estado por estar establecio legalmente. Puede ejercer sus derechos de acceso, rectificación, cancelación u oposición dirigiendose por escrito junto con fotocopia de documento que acredite su identidad a la dirección del responsable en ') . $this->empresa->getDireccion() . ', ' . $this->empresa->getPoblacion())
+      - $this->SetX(15)
+      - $this->MultiCell(0,3,utf8_encode('Si ejercitado el derecho de retracto por el VENDEDOR, el COMPRADOR, por cualquier circunstancia no imputable a él como robo, sustracción,etc. del lote o parte del lote, no pudiere entregárselo, aquél tendrá derecho a percibir ' . $this->master->getImporteRecuperacion() . ' euros más ' . $this->master->getImporteRenovacion() . ' euros (como cláusula penal).'))
+      #
+      # RESGUARDO PIE PRIMERA PAGINA
+      #
+      - $this->SetLeftMargin(15)
+      - $this->SetY(-35)
+      - $this->Rect(15, $this->GetY(), 180, 25)
+      - $this->SetFont('Arial','',8)
+      - $this->Cell(90,5,'Lote ' . $this->master->getNumeroContrato(),0,1)
+      - $this->Cell(90,5,'Vendedor ' . $this->master->getIDCliente()->getRazonSocial(),0,1)
+      - $this->Cell(90,5,'DNI/Pasaporte ' . $this->master->getIDCliente()->getCif(),0,1)
+      - $this->Cell(90,5,'Teléfono ' . $this->master->getIDCliente()->getTelefono(),0,1)
+      - $this->Cell(90,5,'Fecha Compra ' . $this->master->getFecha(),0,1)
+      #
+      - $this->SetLeftMargin(110)
+      - $this->SetY(-35)
+      - $this->SetFont('Arial','B',10)
+      - $this->Cell(80,5,'PESO NETO ' . $this->master->getPesoNeto(),0,1)
+      - $this->SetFont('Arial','',8)
+      - $this->Cell(80,5,'Precio Gramo ' . $this->master->getPrecioGramo(),0,1)
+      - $this->Cell(80,5,'Total a Pagar ' . $this->master->getImportePago(),0,1)
+      - $this->Cell(80,5,'Peso Bruto ' . $this->master->getPesoBruto(),0,1)
+      - $this->SetFont('Arial','B',10)      
+      - $this->Cell(80,5,'NUEVA FECHA ' . $this->master->getFechaVcto(),0,1)
+      - $this->SetFont('Arial','',8)      
+
+      #
+      # SEGUNDA PAGINA. Imágenes de las piezas
+      #
+      - foreach($this->master->getDocuments() as $pieza) {$this->AddPage(); $this->SetX(15); $this->SetFont('Arial','B',10); $this->Cell(0,6,'COPIA DE PIEZAS DEL LOTE ' . $this->master->getNumeroContrato(),1,1,'C'); $this->Ln(5); $this->Image($pieza->getRelativePath(),15,$this->getY(),180,250);}
+      #
+      # TERCERA PAGINA
+      #
+      - $this->SetLeftMargin(15)
+      - $this->AddPage()
+      - $this->SetX(15)
+      - $this->SetFont('Arial','B',10)
+      - $this->Cell(0,6,'HOJA BLANQUEO CAPITALES DEL LOTE ' . $this->master->getNumeroContrato(),1,1,'C')
+      - $this->Ln(10)
+      - $this->SetFont('Arial','',8)
+      - $this->Cell(0,4,'El vendedor declara, a los efectos de la Ley 10/2010, de 28 de abril, de prevención de blanqueo de capitales y financiación del terrorismo',0,1)
+      - $this->Ln(5)
+      - $this->Cell(150,6,'¿ El vendedor tiene residencia fiscal en paraiso fiscal ?',1,0)
+      - $this->Cell(0,6,'NO',1,1,'R')
+      - $this->MultiCell(150,4,utf8_encode('¿ El vendedor desempeña o ha desempeñado en los dos años anteriores cargo o funciones públicas importantes en un país distinto de España o es familiar próximo o allegado a personas que desempeñen o haya desempeñado estas ?'),1,'J')
+      - $this->Cell(0,6,'NO',1,1,'R')
+      - $this->Cell(150,6,'¿ Cual es el destino de los fondos obtenidos en esta operación ?',1,0)
+      - $this->Cell(0,6,'CONSUMO',1,1,'R')
+      - $this->Cell(150,6,'¿ Actua en nombre propio o de tercero ?',1,0)
+      - $this->Cell(0,6,'PROPIO',1,1,'R')
+      - $this->Cell(150,6,'¿ Cual es el origen de la mercancía ?',1,0)
+      - $this->Cell(0,6,'USO PERSONAL',1,1,'R')
+      - $this->Ln(20)
+      - $this->Cell(90,5,'CLIENTE',0,0,'C')
+      - $this->Cell(0,5,'LA EMPRESA',0,1,'C')
+      - $this->Ln(30)
+      - $this->Cell(0,5,'Nombre ' . $this->master->getIDCliente(),0,1)
+
+    footer:   
+
+# RECUPERACION
+  -
+    title: Recuperación Empeño
+    idPerfil: null
+    orientation: P
+    unit: mm
+    format: A4
+    margins: '10,10,15,15'
+    page_break: 10
+    header:
+      # -- Logo --
+      - $this->Image($this->empresa->getLogo(),10,10,40)
+      - $this->Ln(20)
+    body:
+      # PRIMERA PAGINA
+      - $this->SetFont('Arial','B',10)
+      - $this->Cell(0,7,'RECUPERACION (Ejercicio Retracto)',1,1,'C')
+      # Rectangulos
+      - $this->Rect(15, $this->GetY(), 90, 20)
+      - $this->Rect(105, $this->GetY(), 95, 20)
+      - $this->Rect(15, $this->GetY()+20, 185, 20)
+      - $this->Rect(15, $this->GetY()+40, 70, 35)
+      - $this->Rect(85, $this->GetY()+40, 115,35)
+      #
+      # Datos del comprador
+      #
+      - $this->SetFont('Arial','B',10)
+      - $this->SetY(37)
+      - $this->Cell(90,7,'DATOS DEL COMPRADOR:',0,1)
+      - $this->SetFont('Arial','',8)
+      - $this->Cell(90,4,$this->empresa->getRazonSocial() . ' CIF ' . $this->empresa->getCif(),0,1)
+      - $this->Cell(90,4,$this->empresa->getDireccion(),0,1)
+      - $this->Cell(90,4,$this->empresa->getPoblacion() . ' ' . $this->empresa->getTelefono(),0,1)
+      #
+      # Datos del contrato
+      #
+      - $this->SetFont('Arial','B',10)
+      - $this->SetLeftMargin(105)
+      - $this->SetY(37)
+      - $this->Cell(105,7,'FECHA Y HORA ' . $this->master->getFecha() . ' ' . substr($this->master->getCreatedAt(),-8),0,1)
+      - $this->SetFont('Arial','',8)
+      - $this->Cell(35,4,'N. Contrato ' . $this->master->getNumeroContrato(),0,0)
+      - $this->Cell(70,4,' Sucursal ' . $this->master->getIDSucursal(),0,1)
+      - $this->Cell(105,4,'Forma de pago ' . $this->master->getIDFP()->getDescripcion(),0,1)
+      - $this->Cell(105,4,'Atendido por ' . $this->master->getIDComercial()->getNombre(),0,1)
+      #
+      # Datos del vendedor
+      #
+      - $this->SetFont('Arial','B',10)
+      - $this->SetLeftMargin(15)
+      - $this->SetY(57)
+      - $this->Cell(90,7,'DATOS DEL VENDEDOR:',0,1)
+      - $this->SetFont('Arial','',8)
+      - $this->Cell(90,4,'Nombre ' . $this->master->getIDCliente(),0,1)
+      - $this->Cell(90,4,'DNI/Pasaporte ' . $this->master->getIDCliente()->getCif(),0,1)
+      - $this->Cell(90,4,'Dirección ' . $this->master->getIDCliente()->getDireccion(),0,1)
+      - $this->SetLeftMargin(105)
+      - $this->SetY(57)
+      - $this->Cell(45,5,'Fecha Liberación ' . $this->master->getFechaVcto(),0,0)
+      - $this->Cell(60,5,'C.P. ' . $this->master->getIDCliente()->getCodigoPostal(),0,1)
+      - $this->Cell(105,5,'Población ' . $this->master->getIDCliente()->getPoblacion(),0,1)
+      - $this->Cell(55,5,'Provincia ' . $this->master->getIDCliente()->getIDProvincia(),0,0)
+      - $this->Cell(50,5,'Nacionalidad ' . $this->master->getIDCliente()->getIDPais(),0,1)
+      - $this->Cell(45,5,'Teléfono ' . $this->master->getIDCliente()->getTelefono(),0,0)
+      - $this->Cell(60,5,' F. Nacimiento ' . $this->master->getIDCliente()->getFechaNacimiento(), 0, 1)
+      #
+      # Datos de Tasacion
+      #
+      - $this->SetFont('Arial','B',10)
+      - $this->SetLeftMargin(15)
+      - $this->SetY(77)
+      - $this->Cell(70,7,'DATOS TASACIÓN:',0,1)
+      - $this->SetFont('Arial','',9)
+      - $this->Cell(35,4,'GRAMOS:',0,0)
+      - $this->Cell(35,4,$this->master->getPesoNeto() . ' grs',0,1,'R')
+      - $this->Cell(35,4,'PRECIO POR GRAMO:',0,0)
+      - $this->Cell(35,4,$this->master->getPrecioGramo() . ' E',0,1,'R')
+      - $this->Cell(35,4,'TOTAL A PAGAR:',0,0)
+      - $this->Cell(35,4,$this->master->getImportePago() . ' E',0,1,'R')
+      # $this->Cell(35,5,'PENALIZACIÓN POR DEMORA:',0,0)
+      # $this->Cell(35,5,$this->master->getImporteRenovacion() . ' E',0,1,'R')      
+      - $this->Cell(35,5,'EJECUCIÓN RETRACTO:',0,0)
+      - $this->Cell(35,5,$this->master->getImporteRecuperacion() . ' E',0,1,'R')       
+      #
+      # Descripcion de piezas
+      #
+      - $this->SetFont('Arial','B',10)
+      - $this->SetLeftMargin(85)
+      - $this->SetY(77)
+      - $this->Cell(115,5,'DESCRIPCIÓN PIEZAS:',0,1)
+      - $this->SetFont('Arial','',6)
+      - $this->Cell(115,5,'Descrito en el libro oficial de "registro" de conformidad al Real Decreto 197/1988 de 22 de febrero',0,1)
+      - $this->SetFont('Arial','',9)
+      - $this->MultiCell(115,4,$this->master->getDescripcionPiezas(),0,'J')
+      - $this->SetXY(15,112)
+      - $this->SetFont('Arial','',6)
+      - $this->MultiCell(0,3,utf8_encode('En el día de hoy, el VENDEDOR ejercita el derecho de retracto de la venta y devuelve la suma recibida como precio de ' . $this->master->getImportePago() . ' más la suma de ' . $this->master->getImporteRenovacion() . ' estipulada como cláusula penal en el contrato'))      - $this->Ln(10)
+      #
+      # Dni de cliente
+      #
+      - $dni = $this->master->getIDCliente()->getDocuments()
+      - if ($dni[0]) $this->Image($dni[0]->getRelativePath(),15,$this->getY(),90,50)
+      - if ($dni[1]) $this->Image($dni[1]->getRelativePath(),110,$this->getY(),90,50)
+      - $this->SetXY(15,$this->GetY()+55)
+      - $this->Ln(5)
+      - $this->SetX(15)      
+      - $this->Cell(60,5,'CLIENTE',0,0,'C')
+      - $this->Cell(0,5,'LA EMPRESA',0,1,'C')
+      - $this->Ln(20)
+      - $this->SetX(15)
+      - $this->Cell(0,5,'Nombre ' . $this->master->getIDCliente(),0,1)
+      - $this->Ln(5)
+      - $this->SetX(15)
+      - $this->MultiCell(0,3,utf8_encode('En este acto se le hace entrega de la/s pieza/s a su entera satisfacción, declarando ambas partes que no tienen nada que reclamarse.'))
+      - $this->SetX(15)
+      - $this->MultiCell(0,3,utf8_encode('En cumplimiento de la LO 15/99 de 13 de diciembre, de Proteccion de Datos de Caracter Personal, le informamos de que los datos personales que nos aporte a través de este impreso o por cualquier otro documento o medio, serán incluidos en los ficheros responsabilidad de ' . $this->empresa->getRazonSocial() . ' con la finalidad de gestionar y mantener la relación con el cliente, asi como para informarle por cualquier medio incluido el correo electrónico de servicios y promociones que pudieran ser de su interes. Sus datos serán comunicados a las Fuerzas de Seguridad del Estado por estar establecio legalmente. Puede ejercer sus derechos de acceso, rectificación, cancelación u oposición dirigiendose por escrito junto con fotocopia de documento que acredite su identidad a la dirección del responsable en ') . $this->empresa->getDireccion() . ', ' . $this->empresa->getPoblacion())
+    footer:    
+      
+
+# RENOVACION
+  -
+    title: Renovación Empeño
+    idPerfil: null
+    orientation: P
+    unit: mm
+    format: A4
+    margins: '10,10,15,15'
+    page_break: 10
+    header:
+      # -- Logo --
+      - $this->Image($this->empresa->getLogo(),10,10,40)
+      - $this->Ln(20)
+    body:
+      # PRIMERA PAGINA
+      - $this->SetFont('Arial','B',10)
+      - $this->Cell(0,7,'ANEXO CONTRATO DE COMPRAVENTA DE ORO CON DERECHO DE RECTRACTO',1,1,'C')
+      # Rectangulos
+      - $this->Rect(15, $this->GetY(), 90, 20)
+      - $this->Rect(105, $this->GetY(), 95, 20)
+      - $this->Rect(15, $this->GetY()+20, 185, 20)
+      - $this->Rect(15, $this->GetY()+40, 70, 35)
+      - $this->Rect(85, $this->GetY()+40, 115,35)
+      #
+      # Datos del comprador
+      #
+      - $this->SetFont('Arial','B',10)
+      - $this->SetY(37)
+      - $this->Cell(90,7,'DATOS DEL COMPRADOR:',0,1)
+      - $this->SetFont('Arial','',8)
+      - $this->Cell(90,4,$this->empresa->getRazonSocial() . ' CIF ' . $this->empresa->getCif(),0,1)
+      - $this->Cell(90,4,$this->empresa->getDireccion(),0,1)
+      - $this->Cell(90,4,$this->empresa->getPoblacion() . ' ' . $this->empresa->getTelefono(),0,1)
+      #
+      # Datos del contrato
+      #
+      - $this->SetFont('Arial','B',10)
+      - $this->SetLeftMargin(105)
+      - $this->SetY(37)
+      - $this->Cell(105,7,'FECHA Y HORA ' . $this->master->getFecha() . ' ' . substr($this->master->getCreatedAt(),-8),0,1)
+      - $this->SetFont('Arial','',8)
+      - $this->Cell(35,4,'N. Contrato ' . $this->master->getNumeroContrato(),0,0)
+      - $this->Cell(70,4,' Sucursal ' . $this->master->getIDSucursal(),0,1)
+      - $this->Cell(105,4,'Forma de pago ' . $this->master->getIDFP()->getDescripcion(),0,1)
+      - $this->Cell(105,4,'Atendido por ' . $this->master->getIDComercial()->getNombre(),0,1)
+      #
+      # Datos del vendedor
+      #
+      - $this->SetFont('Arial','B',10)
+      - $this->SetLeftMargin(15)
+      - $this->SetY(57)
+      - $this->Cell(90,7,'DATOS DEL VENDEDOR:',0,1)
+      - $this->SetFont('Arial','',8)
+      - $this->Cell(90,4,'Nombre ' . $this->master->getIDCliente(),0,1)
+      - $this->Cell(90,4,'DNI/Pasaporte ' . $this->master->getIDCliente()->getCif(),0,1)
+      - $this->Cell(90,4,'Dirección ' . $this->master->getIDCliente()->getDireccion(),0,1)
+      - $this->SetLeftMargin(105)
+      - $this->SetY(57)
+      - $this->Cell(45,5,'Fecha Liberación ' . $this->master->getFechaVcto(),0,0)
+      - $this->Cell(60,5,'C.P. ' . $this->master->getIDCliente()->getCodigoPostal(),0,1)
+      - $this->Cell(105,5,'Población ' . $this->master->getIDCliente()->getPoblacion(),0,1)
+      - $this->Cell(55,5,'Provincia ' . $this->master->getIDCliente()->getIDProvincia(),0,0)
+      - $this->Cell(50,5,'Nacionalidad ' . $this->master->getIDCliente()->getIDPais(),0,1)
+      - $this->Cell(45,5,'Teléfono ' . $this->master->getIDCliente()->getTelefono(),0,0)
+      - $this->Cell(60,5,' F. Nacimiento ' . $this->master->getIDCliente()->getFechaNacimiento(), 0, 1)
+      #
+      # Datos de Tasacion
+      #
+      - $this->SetFont('Arial','B',10)
+      - $this->SetLeftMargin(15)
+      - $this->SetY(77)
+      - $this->Cell(70,7,'DATOS TASACIÓN:',0,1)
+      - $this->SetFont('Arial','',9)
+      - $this->Cell(35,4,'GRAMOS:',0,0)
+      - $this->Cell(35,4,$this->master->getPesoNeto() . ' grs',0,1,'R')
+      - $this->Cell(35,4,'PRECIO POR GRAMO:',0,0)
+      - $this->Cell(35,4,$this->master->getPrecioGramo() . ' E',0,1,'R')
+      - $this->Cell(35,4,'TOTAL A PAGAR:',0,0)
+      - $this->Cell(35,4,$this->master->getImportePago() . ' E',0,1,'R')
+      - $this->Cell(35,5,'PENALIZACIÓN POR DEMORA:',0,0)
+      - $this->Cell(35,5,$this->master->getImporteRenovacion() . ' E',0,1,'R')      
+      - $this->Cell(35,5,'EJECUCIÓN RETRACTO:',0,0)
+      - $this->Cell(35,5,$this->master->getImporteRecuperacion() . ' E',0,1,'R')       
+      #
+      # Descripcion de piezas
+      #
+      - $this->SetFont('Arial','B',10)
+      - $this->SetLeftMargin(85)
+      - $this->SetY(77)
+      - $this->Cell(115,5,'DESCRIPCIÓN PIEZAS:',0,1)
+      - $this->SetFont('Arial','',6)
+      - $this->Cell(115,5,'Descrito en el libro oficial de "registro" de conformidad al Real Decreto 197/1988 de 22 de febrero',0,1)
+      - $this->SetFont('Arial','',9)
+      - $this->MultiCell(115,4,$this->master->getDescripcionPiezas(),0,'J')
+      - $this->SetXY(15,112)
+      - $this->SetFont('Arial','',6)
+      - $this->MultiCell(0,3,utf8_encode('El VENDEDOR declara que las piezas reseñadas son de su propiedad, adquiridas de forma lícita y se hallan libres de cargas. El VENDEDOR da su conformidad al precio de tasación indicado, sirviendo la presente de la más eficaz carta de pago.'),0,1,'J')
+      - $this->Ln(10)
+      #
+      # Dni de cliente
+      #
+      - $dni = $this->master->getIDCliente()->getDocuments()
+      - if ($dni[0]) $this->Image($dni[0]->getRelativePath(),15,$this->getY(),90,50)
+      - if ($dni[1]) $this->Image($dni[1]->getRelativePath(),110,$this->getY(),90,50)
+      - $this->SetXY(15,$this->GetY()+55)
+      - $this->Ln(5)
+      - $this->SetX(15) 
+      - $this->MultiCell(0,3,utf8_encode('Se amplia en plazo de ejercicio del derecho de retracto, que deberá ejercitar como máximo en el día ' . $this->master->getFechaVcto()),0,1,'J')      
+      - $this->SetX(15)      
+      - $this->MultiCell(0,3,utf8_encode('Si el vendedor ejercita el derecho de retracto, deberá devolver el precio recibido, de ' . $this->master->getImportePago() . ' más ' . $this->master->getImporteRenovacion() . ' de indemnización (cláusula penal)'),0,1,'J')       
+      - $this->SetX(15)      
+      - $this->Cell(60,5,'CLIENTE',0,0,'C')
+      - $this->Cell(0,5,'LA EMPRESA',0,1,'C')
+      - $this->Ln(20)
+      - $this->SetX(15)
+      - $this->Cell(0,5,'Nombre ' . $this->master->getIDCliente(),0,1)
+      - $this->Ln(5)
+      - $this->SetX(15)
+      - $this->MultiCell(0,3,utf8_encode('En cumplimiento de la LO 15/99 de 13 de diciembre, de Proteccion de Datos de Caracter Personal, le informamos de que los datos personales que nos aporte a través de este impreso o por cualquier otro documento o medio, serán incluidos en los ficheros responsabilidad de ' . $this->empresa->getRazonSocial() . ' con la finalidad de gestionar y mantener la relación con el cliente, asi como para informarle por cualquier medio incluido el correo electrónico de servicios y promociones que pudieran ser de su interes. Sus datos serán comunicados a las Fuerzas de Seguridad del Estado por estar establecio legalmente. Puede ejercer sus derechos de acceso, rectificación, cancelación u oposición dirigiendose por escrito junto con fotocopia de documento que acredite su identidad a la dirección del responsable en ') . $this->empresa->getDireccion() . ', ' . $this->empresa->getPoblacion(),0,1,'J') 
+      - $this->SetX(15)
+      - $this->MultiCell(0,3,utf8_encode('Si ejercitado el derecho de retracto por el vendedor, el comprador, por cualquier circunstancia no imputable a el como robo, sustracción, etc del lote o parte del lote no pudiere entregárselo, aquel tendrá derecho a percibir ' . $this->master->getImportePago() . ' más ' . $this->master->getImporteRenovacion() . '(como cláusula penal)'),0,1,'J') 
+      - $this->SetX(15)      
+      - $this->MultiCell(0,3,utf8_encode('En este acto se recibe como indemnización (cláusula penal por daños y perjuicios sufridos) por la demora producida en virtud de la concesión de nuevo plazo de resolución del presente contrato, la cantidad de ' . $this->master->getImporteRenovacion()),0,1,'J') 
+      - $this->Ln(5)
+      - $this->SetX(15)      
+      - $this->Cell(0,5,'Fecha límite ' . $this->master->getFechaVcto(),0,1)
+    footer:    
+      
+       

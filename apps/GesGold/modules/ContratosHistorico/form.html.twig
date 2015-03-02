@@ -1,0 +1,53 @@
+{# TEMPLATE ContratosHistorico/form.html.twig #}
+{# Muestra los campos editables de la entidad #}
+
+{% extends 'ContratosHistorico/index.html.twig' %}
+
+{% block listado %}
+<div class='Listado'>
+
+    <table width='100%'>
+        <tr class='Titulos'>
+            <td class='Item'>Operación</td>
+            <td class='Item'>Fecha</td>
+            <td class='Item'>Descripción</td>
+            <td class='Item'>Usuario</td>
+            <td>&nbsp;</td>
+        </tr>
+
+        <tbody class="Cuerpo">
+            {% for key,objeto in values.listado.data %}
+
+            <form name="linea{{key}}" action="" method="POST">
+                <input name="controller" value="ContratosHistorico" type="hidden" />
+                <input name="action" id="action" value="edit" type="hidden" />
+                <input name="ContratosHistorico[IDContrato]" value="{{ values.linkBy.value }}" type="hidden" />
+                <input name="ContratosHistorico[Id]" value="{{ objeto.Id }}" type="hidden" />
+                <input name="accion" id="accion" value="" type="hidden" />
+                <tr class="ItemListado">
+                {% if objeto.Id == 0 %}
+                    <td>{{ macro.select(none,'Etiqueta','ContratosHistorico[IDOperacion]','ContratosHistorico_IDOperacion' ~ key,none,objeto.IDOperacion.IDOperacion,objeto.IDOperacion.fetchAll,'Select100')}}</td>
+                    <td>{{ macro.fecha(none,'Etiqueta','ContratosHistorico[Fecha]','ContratosHistorico_Fecha',objeto.Fecha,'10','CampoFecha') }}</td>
+                    <td><input name="ContratosHistorico[Descripcion]" value="{{objeto.Descripcion}}" type="text" style="width:130px;" /></td>
+                    <td></td>
+                    <td align="center">
+                        <input type="image" src="{{app.path}}/images/nuevo.png" onclick="getElementById('action').value='new';" alt="Nuevo" title="Crear Linea" />
+                    </td>
+                {% else %}
+                    <td>{{objeto.IDOperacion}}</td>
+                    <td>{{objeto.Fecha}}</td>
+                    <td>{{objeto.Descripcion}}</td>
+                    <td>{{objeto.CreatedBy}}</td>
+                    <td align="center"></td>
+                {% endif %}
+                </tr>
+            </form>
+
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{{ macro.foco('ContratosHistorico_IDOperacion0') }}
+
+{% endblock %}

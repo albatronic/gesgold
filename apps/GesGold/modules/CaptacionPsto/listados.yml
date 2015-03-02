@@ -1,0 +1,47 @@
+# Module: CaptacionPsto
+# Document : modules\CaptacionPsto\listados.yml
+#
+# @author Sergio Pérez <sergio.perez@albatronic.com>
+# @copyright INFORMATICA ALBATRONIC SL
+# @since 25.04.2012 12:27:39
+#
+---
+listados:
+  -
+    title: CaptacionPsto
+    order_by: Id ASC
+    break_field: null
+    idPerfil: null
+    orientation: P
+    unit: mm
+    format: A4
+    margins: 10, 10, 15, 10
+    body_font: Courier, ,8
+    columns:
+      -
+        title: IDCaptacion
+        field: IDCaptacion
+        length: 4
+        align: R
+        type: integer
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Ano
+        field: Ano
+        length: 11
+        align: R
+        type: integer
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Presupuesto
+        field: Presupuesto
+        length: 10
+        align: R
+        type: decimal
+        total: NO
+        formula: null
+        format: null

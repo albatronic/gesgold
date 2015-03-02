@@ -1,0 +1,29 @@
+{# Template list.html.twig for Almacenes #}
+{# -------------------------------------------------------#}
+{% extends 'Almacenes/index.html.twig' %}
+
+{% block listado %}
+<div class='Listado'>
+
+        <table width="100%">
+            <tr class='Titulos'>
+                <td class='Item'>Nombre</td>
+                <td class='Item'>Dirección</td>
+                <td class='Item'>Población</td>
+            </tr>
+
+            <tbody class='Cuerpo'>
+            {% for key,objeto in values.listado.data %}
+            <tr>
+                <td class='Item'><a href="{{app.path}}/Almacenes/edit/{{objeto.IDAlmacen}}" title="Editar...">{{objeto.Nombre|slice(0,40)}}</a></td>
+                <td class='Item'>{{objeto.Direccion|slice(0,40)}}</td>
+                <td class='Item'>{{objeto.Poblacion|slice(0,30)}}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan='2'>No hay informaci&oacute;n que cumpla esos criterios</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+</div>
+{% endblock %}

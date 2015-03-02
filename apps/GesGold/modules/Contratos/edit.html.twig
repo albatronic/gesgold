@@ -1,0 +1,141 @@
+{# Template edit.html.twig for Contratos #}
+{# -------------------------------------------------------#}
+{# EDITAR UN REGISTRO. ACCIONES: GUARDAR Y BORRAR         #}
+{# -------------------------------------------------------#}
+{% extends values.controller  ~ '/index.html.twig' %}
+
+{% block mantenimiento %}
+<div class="FormManto">
+    <form name="manto" id="manto_{{ values.controller }}" action="" enctype="multipart/form-data" method="POST">
+        <input name="controller" value="{{ values.controller }}" type="hidden" />
+        <input name="action" id="action" value="edit" type="hidden" />
+        <input name="accion" id="accion" value="" type="hidden" />
+        <input name="{{ values.controller }}[IDContrato]" value="{{ values.datos.IDContrato }}" type="hidden" />
+        <input name="{{ values.controller }}[NumeroContrato]" id="Contratos_NumeroContrato" value="{{ values.datos.NumeroContrato }}" type="hidden" />
+
+        {% if not tpv %}
+            <input name="IDTpv" id="IDTpv" value="{{tpv}}" type="hidden" />
+            <div id="dialogConfirmar" title="Identifique TPV">
+            {{ macro.select('Indique Tpv','Etiqueta','dialogIDTpv','dialogIDTpv',none,none,values.datos.IDSucursal.getTpvs,'Select') }}
+            <input type="submit" value="Aceptar" class="Comando" style="margin-top: 20px;" alt="Aceptar" title="Aceptar"
+                onclick="
+                    $('#action').val('setTpvEdit');
+                    $('#IDTpv').val( $('#dialogIDTpv').val() );
+                    $('#manto_{{ values.controller }}').submit();"
+            />
+            </div>
+        {% endif %}
+
+        <div class='Comandos'>
+            <div class="Titulo">
+                Contrato: {{values.datos.NumeroContrato}} [{{values.datos.IDEstado.Descripcion}}]
+                {% if values.datos.IDEstado.IDTipo == '1' and values.permisos['B'] and user.Rol.IDTipo == '9' %}
+                    <input type="image" src="{{app.path}}/images/cancel_cmd.png" width="24px" onclick="if (!confirm('¿Desea anular el contrato {{values.datos.NumeroContrato}}?')) {return false;} else {getElementById('action').value='Anular';}" alt="Anular" title="Anular Contrato" />
+                {% endif %}
+
+                {% if values.datos.IDEstado.IDTipo == '0' %}
+                    {% if values.permisos['A'] %}
+                    <image src="{{app.path}}/images/confirm_cmd.png" style="width: 24px; cursor: pointer;" onclick="$('#dialogFormasPago').dialog('open');" alt="Confirmar" title="Confirmar" />
+
+                    <input type="image" src="{{app.path}}/images/save_cmd.png" width="24px" onclick="getElementById('accion').value='Guardar';" alt="Guardar" title="Guardar" />
+                    {% endif %}
+
+                    {% if values.permisos['B'] %}
+                    <input type="image" src="{{app.path}}/images/trash_cmd.png" width="24px" onclick="if (!confirm('¿Desea borrar el contrato {{values.datos.NumeroContrato}}?')) {return false;} else {getElementById('accion').value='Borrar';}" alt="Borrar" title="Borrar Contrato" />
+                    {% endif %}
+
+                {% endif %}
+
+                {% if values.permisos['C'] %}
+                    {{ macro.botonDocumento(app.path,'contratos','Contratos',values.datos.IDContrato)}}
+                    <input type="image" src="{{app.path}}/images/send_cmd.png" width="24px" onclick="getElementById('action').value='Enviar';" alt="Enviar" title="Enviar" />
+                {% endif %}
+
+                {% include '_global/comandosAuditoria.html.twig' with {'controller': values.controller} %}
+            </div>
+        </div>
+
+        <div class='Cuerpo'>
+            {% include "_global/FormErrores.html.twig" with {'errores': values.errores} %}
+            {% include "_global/alertas.html.twig" with {'alertas': values.alertas} %}
+            {% include values.controller ~ "/form.html.twig" with {'datos': values.datos} %}
+        </div>
+    </form>
+</div>
+
+<form name="pago" id="pago_{{ values.controller }}" action="" enctype="multipart/form-data" method="POST">
+        <input name="controller" value="{{ values.controller }}" type="hidden" />
+        <input name="action" id="actionCobrar" value="Confirmar" type="hidden" />
+        <input name="accion" id="accion" value="" type="hidden" />
+        <input name="{{ values.controller }}[IDContrato]" value="{{ values.datos.IDContrato }}" type="hidden" />
+        <input name="pago[0][IDFP]" id="pago_0_IDFP" type="hidden" />
+        <input name="pago[0][Importe]" id="pago_0_importe" type="hidden" />
+        <input name="pago[1][IDFP]" id="pago_1_IDFP" type="hidden" />
+        <input name="pago[1][Importe]" id="pago_1_importe" type="hidden" />
+        
+<div id="dialogFormasPago" title="Indique la forma de pago">
+    
+    <table>
+        <tr><td style="text-align:center;">Forma de Pago</td><td style="text-align:center;">Importe</td></tr>
+        <tr>
+            <td>{{ macro.select(none,'Etiqueta','pago[0][IDFP]','pago0IDFP',none,values.datos.IDFP.IDFP,values.datos.IDFP.fetchAll('Descripcion','0'),'Select') }}</td>
+            <td><input name="pago[0][Importe]" id="pago0Importe" value="{{values.datos.ImportePago}}" type="text" style="width:70px;text-align:right;" onchange="recalcula();"/></td>
+        </tr>
+        <tr>
+            <td>{{ macro.select(none,'Etiqueta','pago[1][IDFP]','pago1IDFP',none,none,values.datos.IDFP.fetchAll('Descripcion','0'),'Select') }}</td>
+            <td><input name="pago[1][Importe]" id="pago1Importe" value="0" type="text" style="width:70px;text-align:right;" onchange="recalcula();"/></td>
+        </tr>
+        <tr>
+            <td>Pendiente de pago</td>
+            <td><input id="cuadrePago" value="0" type="text" style="width:70px;text-align:right;" disabled /></td>
+        </tr>
+    </table>
+    <div id="mensajeCuadre"></div>
+    <input type="submit" value="Confirmar" class="Comando" style="margin-top: 20px;" alt="Confirmar" title="Confirmar Contrato"
+           onclick="
+               $('#actionCobrar').val('Confirmar');
+               $('#pago_0_importe').val( $('#pago0Importe').val() );
+               $('#pago_0_IDFP').val( $('#pago0IDFP').val() );
+               $('#pago_1_importe').val( $('#pago1Importe').val() );
+               $('#pago_1_IDFP').val( $('#pago1IDFP').val() );
+               $('#pago_{{ values.controller }}').submit();
+          "
+    />
+</div>
+</form>
+
+<script language='JavaScript' type='text/javascript'>
+    
+    function recalcula() {
+        var mensaje;
+        var cuadre = parseFloat({{values.datos.ImportePago}}) - ( parseFloat($('#pago0Importe').val()) + parseFloat($('#pago1Importe').val()) );
+        
+        $('#cuadrePago').val(cuadre);
+
+        if (cuadre != 0) 
+            mensaje = "<p class='alerta'>Importes descuadrados</p>";
+        else
+            mensaje = '';
+        
+        $('#mensajeCuadre').html(mensaje);
+    }
+    
+    $(function() {
+        $( "#dialogFormasPago" ).dialog({
+            autoOpen: false,
+            modal: true,
+            width: 330,
+            height: 200,
+            position: ['center'],
+            closeOnEscape: true,
+            resizable: false,
+            draggable:false,
+            show: "slide",
+            beforeclose :
+                function(event,ui){ 
+                    if ( $('#cuadrePago').val() != '0' ) return false;
+                }
+            });
+    });
+</script>
+{% endblock %}

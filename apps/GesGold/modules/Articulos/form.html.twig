@@ -1,0 +1,57 @@
+{# TEMPLATE Articulos/form.html.twig #}
+{# Muestra los campos editables de la entidad #}
+
+<div class="Izquierda" style="width:49%;">
+{{ macro.input('Código','Etiqueta','text','Articulos[Codigo]','Articulos_Codigo',datos.Codigo,'25','CampoTextoCorto') }}
+{{ macro.input('Descripción','Etiqueta','text','Articulos[Descripcion]','Articulos_Descripcion',datos.Descripcion,'255','CampoTextoLargo') }}
+{{ macro.select('Familia','Etiqueta','Articulos[IDFamilia]','Articulos_IDFamilia',none,datos.IDFamilia.IDFamilia,datos.IDFamilia.fetchAll('Familia'),'Select')}}
+{{ macro.select('Venta','Etiqueta','Articulos[IDVenta]','Articulos_IDVenta',none,datos.IDVenta.IDVenta,datos.IDVenta.fetchAll('TipoVenta'),'Select')}}
+{{ macro.input('Número de días','Etiqueta','text','Articulos[NumeroDias]','Articulos_NumeroDias',datos.NumeroDias,'4','CampoUnidades') }}
+{{ macro.input('% Alta','Etiqueta','text','Articulos[PorcentajeAlta]','Articulos_PorcentajeAlta',datos.PorcentajeAlta,'5','CampoUnidades') }}
+{# macro.input('% Renovación','Etiqueta','text','Articulos[PorcentajeRenovacion]','Articulos_PorcentajeRenovacion',datos.PorcentajeRenovacion,'5','CampoUnidades') #}
+</div>
+
+<div class="Derecha" style="width:51%;">
+    <div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+        <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+            <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a href="#tabs-1">Caracter&iacute;sticas</a></li>
+            {% if datos.IDArticulo %}
+            <li class="ui-state-default ui-corner-top"><a href="#tabs-2">Imágenes</a></li>
+            {% endif %}
+            <li class="ui-state-default ui-corner-top"><a href="#tabs-3">Udes de Medida</a></li>
+        </ul>
+
+        <div id="tabs-1" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+            {{ macro.textarea(none,'Etiqueta','Articulos[Caracteristicas]','Articulos_Caracteristicas',datos.Caracteristicas,none,none,'TextArea')}}
+        </div>
+
+        {% if datos.IDArticulo %}
+        <div id="tabs-2" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+            {{ macro.documentos(values.controller,datos.getPrimaryKeyValue)}}
+        </div>
+        {% endif %}
+
+        <div id="tabs-3" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+            <table width='100%'>
+                <tr>
+                    <td>{{ macro.select('Básica','Etiqueta','Articulos[UMB]','Articulos_UMB',none,datos.UMB.Id,datos.UMB.fetchAll('UnidadMedida'),'Select80')}}</td>
+                    <td class="Subtitulo">Factores de Conversion</td>
+                </tr>
+                <tr>
+                    <td>{{ macro.select('de Compra','Etiqueta','Articulos[UMC]','Articulos_UMC',none,datos.UMC.Id,datos.UMC.fetchAll('UnidadMedida'),'Select80')}}</td>
+                    <td>{{ macro.input('de U.C. a U.B.','Etiqueta','text','Articulos[CUMC]','Articulos_CUMC',datos.CUMC,'4','CampoUnidades') }}</td>
+                </tr>
+                <tr>
+                    <td>{{ macro.select('de Almacenaje','Etiqueta','Articulos[UMA]','Articulos_UMA',none,datos.UMA.Id,datos.UMA.fetchAll('UnidadMedida'),'Select80')}}</td>
+                    <td>{{ macro.input('de U.A. a U.B.','Etiqueta','text','Articulos[CUMA]','Articulos_CUMA',datos.CUMA,'4','CampoUnidades') }}</td>
+                </tr>
+                <tr>
+                    <td>{{ macro.select('de Venta','Etiqueta','Articulos[UMV]','Articulos_UMV',none,datos.UMV.Id,datos.UMV.fetchAll('UnidadMedida'),'Select80')}}</td>
+                    <td>{{ macro.input('de U.V. a U.B.','Etiqueta','text','Articulos[CUMV]','Articulos_CUMV',datos.CUMV,'4','CampoUnidades') }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+{{ macro.foco('Articulos_Codigo') }}

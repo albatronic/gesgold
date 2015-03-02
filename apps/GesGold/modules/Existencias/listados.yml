@@ -1,0 +1,38 @@
+# Module: Existencias
+# Document : modules\Existencias\listados.yml
+#
+# @author Sergio Pérez <sergio.perez@albatronic.com>
+# @copyright INFORMATICA ALBATRONIC SL
+# @since 18.12.2011 00:27:53
+#
+---
+listados:
+  -
+    title: Existencias
+    order_by: IDAlmacen,IDArticulo ASC
+    break_field: IDAlmacen
+    idPerfil: null
+    orientation: P
+    unit: mm
+    format: A4
+    margins: 10, 10, 15, 40
+    body_font: Courier, ,8
+    columns:
+      -
+        title: Articulo
+        field: IDArticulo
+        length: 50
+        align: L
+        type: integer
+        total: NO
+        formula: null
+        format: null
+      -
+        title: Gramos Reales
+        field: Reales
+        length: 15
+        align: R
+        type: decimal
+        total: NO
+        formula: null
+        format: %01.2f
